@@ -1,0 +1,8 @@
+import type { APIRoute } from 'astro';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { timingSafeEqual } from 'node:crypto';
+import { getResults } from '../../lib/editorial';
+import { eventConfig } from '../../event.config';
+export const GET:APIRoute=async()=>{const data=await getResults();const results=eventConfig.resultsAnonymized?data.results.map((r,i)=>({position:r.position||i+1,code:r.code,section:r.section,grade:r.grade,county:r.county,school:r.school,score:r.score,award:r.award})):data.results;return Response.json({...data,results},{headers:{'Cache-Control':'public, max-age=30, stale-while-revalidate=60'}})};
+export const PUT:APIRoute=async({request})=>{const configured=process.env.ADMIN_TOKEN||'',given=request.headers.get('authorization')?.replace(/^Bearer\s+/i,'')||'';const a=Buffer.from(configured),b=Buffer.from(given);if(!configured||!given||a.length!==b.length||!timingSafeEqual(a,b))return Response.json({message:'Neautorizat.'},{status:401});let results;try{results=await request.json()}catch{return Response.json({message:'JSON invalid.'},{status:400})}if(!Array.isArray(results)||results.length>10000||results.some((r:any)=>!r||typeof r.code!=='string'||typeof r.section!=='string'||!Number.isFinite(Number(r.score))))return Response.json({message:'Format rezultate invalid. Sunt necesare code, section și score.'},{status:400});await mkdir(resolve(process.env.ONTIC_DATA_DIR||'./data'),{recursive:true});await writeFile(resolve(process.env.ONTIC_DATA_DIR||'./data','results.json'),JSON.stringify({updatedAt:new Date().toISOString(),results},null,2),'utf8');return Response.json({message:`${results.length} rezultate salvate.`})};
