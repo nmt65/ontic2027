@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/editorial.css';
 import { eventConfig } from '../event.config';
 import { copy } from '../content/site';
 const { title = 'ONTIC 2027', description = 'Olimpiada Națională de Tehnologia Informației și Comunicațiilor · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en' };
@@ -56,3 +57,6 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
     <script>import '../scripts/maps';</script>
   </body>
 </html>
+
+<style>@import '../styles/editorial.css';</style>
+
