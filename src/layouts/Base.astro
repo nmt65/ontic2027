@@ -39,7 +39,7 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
     <footer class="site-footer"><div class="footer-main wrap">
       <div class="footer-brand"><a class="brand" href={`/${lang}`}><img src="/ontic-logo.svg" width="50" height="50" alt="" /><span class="brand-word"><strong>ONTIC<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a><p>{t.footerTag}</p></div>
       <div><h2>{lang === 'ro' ? 'Organizatori' : 'Organizers'}</h2><p>Ministerul Educației și Cercetării</p><p>Inspectoratul Școlar Județean Suceava</p><p><a href={`/${lang}/gazda`}>{eventConfig.host}</a></p></div>
-      <div><h2>{lang === 'ro' ? 'Contact' : 'Contact'}</h2><p>{eventConfig.email}</p><p>{eventConfig.phone}</p><div class="socials"><a href={eventConfig.social.facebook || '#contact'} aria-label="Facebook">f</a><a href={eventConfig.social.instagram || '#contact'} aria-label="Instagram">◎</a><a href={eventConfig.social.youtube || '#contact'} aria-label="YouTube">▶</a></div></div>
+      <div><h2>{lang === 'ro' ? 'Contact' : 'Contact'}</h2><p>{eventConfig.email.startsWith('[DE COMPLETAT') ? (lang === 'ro' ? 'Datele de contact vor fi anunțate.' : 'Contact details will be announced.') : eventConfig.email}</p>{!eventConfig.phone.startsWith('[DE COMPLETAT') && <p>{eventConfig.phone}</p>}<a href={`/${lang}/contact`}>{lang === 'ro' ? 'Pagina de contact ↗' : 'Contact page ↗'}</a></div>
       <div><h2>{lang === 'ro' ? 'Informații' : 'Information'}</h2><a href={`/${lang}/confidentialitate`}>{lang === 'ro' ? 'Confidențialitate' : 'Privacy'}</a><a href={`/${lang}/cookies`}>Cookies</a><a href={`/${lang}/termeni`}>{lang === 'ro' ? 'Termeni' : 'Terms'}</a><a href={`/${lang}/accesibilitate`}>{lang === 'ro' ? 'Accesibilitate' : 'Accessibility'}</a></div>
     </div><div class="footer-bottom wrap"><span>© {eventConfig.year} ONTIC · Suceava, România</span><span>{lang === 'ro' ? 'Realizat cu grijă în Bucovina' : 'Made with care in Bucovina'}</span></div></footer>
     <div class="cookie-banner" hidden role="dialog" aria-label="Preferințe cookie"><div><strong>Preferințe cookie</strong><p>Folosim doar cookie-uri funcționale. Analitica privacy-friendly este opțională.</p></div><button data-cookie="essential">Doar esențiale</button><button class="button button-small" data-cookie="all">Acceptă analitica</button></div>
@@ -48,15 +48,15 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       const header = document.querySelector('.site-header');
       const menu = document.querySelector('.menu-toggle');
       menu?.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); header?.classList.toggle('menu-open', open); });
+      document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { menu?.setAttribute('aria-expanded','false'); header?.classList.remove('menu-open'); menu?.focus(); } });
       const theme = localStorage.getItem('ontic-theme'); if (theme) document.documentElement.dataset.theme = theme;
       document.querySelector('.theme-toggle')?.addEventListener('click', () => { const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark'; document.documentElement.dataset.theme = next; localStorage.setItem('ontic-theme', next); });
       const loadAnalytics = () => { const domain = document.documentElement.dataset.plausibleDomain; if (!domain || document.querySelector('[data-ontic-analytics]')) return; const s = document.createElement('script'); s.defer = true; s.src = 'https://plausible.io/js/script.js'; s.dataset.domain = domain; s.dataset.onticAnalytics = 'true'; document.head.append(s); };
-      const banner = document.querySelector('.cookie-banner'); const choice = localStorage.getItem('ontic-cookie-choice'); if (choice === 'all') loadAnalytics(); if (!choice && !location.pathname.includes('/confidentialitate')) banner.hidden = false;
+      const banner = document.querySelector('.cookie-banner'); const choice = localStorage.getItem('ontic-cookie-choice'); if (choice === 'all') loadAnalytics(); if (!choice && document.documentElement.dataset.plausibleDomain && !location.pathname.includes('/confidentialitate')) banner.hidden = false;
       document.querySelectorAll('[data-cookie]').forEach(b => b.addEventListener('click', () => { localStorage.setItem('ontic-cookie-choice', b.dataset.cookie); banner.hidden = true; if (b.dataset.cookie === 'all') loadAnalytics(); }));
     </script>
     <script>import '../scripts/maps';</script>
   </body>
 </html>
 
-<style>@import '../styles/editorial.css';</style>
 
