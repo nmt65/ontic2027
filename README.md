@@ -24,7 +24,7 @@ ontic-2027/
 │   ├── content/              # conținut RO/EN, știri, FAQ, zile, parteneriate
 │   ├── layouts/Base.astro     # SEO, hreflang, Event schema, header/footer
 │   ├── pages/                 # /ro, /en, pagini slug, API și sitemap
-│   ├── styles/global.css
+│   ├── styles/site.css        # o singură foaie de stil: tokeni, componente, responsive
 │   └── event.config.ts        # dată unică, identitate, secțiuni, contacte
 ├── .env.example
 ├── astro.config.mjs

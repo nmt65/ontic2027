@@ -2,61 +2,185 @@
 import Base from '../../layouts/Base.astro';
 import { eventConfig, dateIsKnown } from '../../event.config';
 import { getEditorial } from '../../lib/editorial';
+
 const lang = Astro.params.lang as 'ro' | 'en';
 const ro = lang === 'ro';
-const say = (a: string, b: string) => ro ? a : b;
+const say = (romanian: string, english: string) => (ro ? romanian : english);
 const { news } = await getEditorial();
-const panorama = 'https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/01_CETATEA_DE_SCAUN_A_SUCEVEI_panorama.jpg/1280px-01_CETATEA_DE_SCAUN_A_SUCEVEI_panorama.jpg';
-const fortress = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cetatea_de_Scaun_a_Sucevei.jpg/1280px-Cetatea_de_Scaun_a_Sucevei.jpg';
+
+// Wikimedia Commons photographs. Credits are shown next to each image.
+const fortressPhoto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cetatea_de_Scaun_a_Sucevei.jpg/1280px-Cetatea_de_Scaun_a_Sucevei.jpg';
+const voronetPhoto = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Voronet%20Monastery.JPG?width=1280';
+
+// TIC has one ranking per grade; C# has one shared ranking.
+const ticRankingCount = eventConfig.sections.filter((section) => section.kind === 'tic').length;
+const formattedStartDate = dateIsKnown
+  ? new Date(eventConfig.startDate!).toLocaleDateString(ro ? 'ro-RO' : 'en-GB', { dateStyle: 'long', timeZone: 'Europe/Bucharest' })
+  : null;
 ---
 <Base lang={lang} title={say('Acasă', 'Home')}>
   <section class="launch-hero" aria-labelledby="launch-title">
-    <p class="eyebrow">ONTIC 2027 · SUCEAVA, ROMÂNIA</p>
-    <h1 id="launch-title">{say('Viitorul începe', 'The future starts')}<br/><span>{say('cu ideile tale.', 'with your ideas.')}</span></h1>
-    <p class="hero-description">{say('Olimpiada Națională de Tehnologia Informației și Comunicațiilor. O nouă generație. Cinci secțiuni. Un loc pentru idei mari.', 'The National Olympiad in Information and Communication Technology. A new generation. Five sections. A place for big ideas.')}</p>
-    <div class="launch-actions"><a class="button" href={`/${lang}/participare`}>{say('Pregătește-ți participarea', 'Prepare your participation')}</a><a class="button button-outline" href="#discover">{say('Descoperă ONTIC', 'Discover ONTIC')}</a></div>
-    <p class="edition-note">{dateIsKnown ? new Date(eventConfig.startDate!).toLocaleDateString(ro ? 'ro-RO' : 'en-GB', { dateStyle: 'long', timeZone: 'Europe/Bucharest' }) : say('Etapa națională · Data va fi anunțată', 'National stage · Date to be announced')}</p>
-    <a class="scroll-cue" href="#discover"><i aria-hidden="true"></i>{say('Derulează pentru a descoperi', 'Scroll to explore')}</a>
-    <figure class="hero-landscape"><img src={panorama} width="1280" height="328" fetchpriority="high" alt={say('Panorama Cetății de Scaun a Sucevei', 'Panorama of Suceava’s Seat Fortress')}/><figcaption class="landscape-label"><span>{say('Un oraș cu istorie. O generație cu viitor.', 'A city with history. A generation with a future.')}</span><strong>Suceava. 2027.</strong></figcaption></figure>
+    <p class="hero-event"><strong>ONTIC 2027</strong><span>Suceava, România</span></p>
+    <h1 id="launch-title">{say('Viitorul începe', 'The future starts')}<br /><span>{say('cu ideile tale.', 'with your ideas.')}</span></h1>
+    <p class="hero-description">{say('Etapa națională a Olimpiadei de Tehnologia Informației și Comunicațiilor: cinci secțiuni, elevi din toată țara, o săptămână în Bucovina.', 'The national stage of Romania’s Information and Communication Technology Olympiad: five sections, students from across the country, one week in Bucovina.')}</p>
+    <div class="launch-actions">
+      <a class="button" href={`/${lang}/participare`}>{say('Ghid de participare', 'Participation guide')}</a>
+      <a class="text-link" href={`/${lang}/concurs`}>{say('Secțiuni și regulamente', 'Sections and rules')} <span aria-hidden="true">→</span></a>
+    </div>
+    <figure class="hero-landscape">
+      <img src={fortressPhoto} width="1280" height="960" fetchpriority="high" alt={say('Zidurile Cetății de Scaun a Sucevei', 'The walls of Suceava’s Seat Fortress')} />
+      <figcaption class="landscape-label"><span>{say('Un oraș cu istorie. O generație cu viitor.', 'A city with history. A generation with a future.')}</span><strong>Suceava. 2027.</strong></figcaption>
+    </figure>
   </section>
-  <p class="photo-credit hero-credit"><a href="https://commons.wikimedia.org/wiki/File:01_CETATEA_DE_SCAUN_A_SUCEVEI_panorama.jpg">Domino1027</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/ro/">CC BY-SA 3.0 RO</a> · {say('fotografie decupată', 'cropped photograph')}</p>
+  <p class="photo-credit hero-credit"><a href="https://commons.wikimedia.org/wiki/File:Cetatea_de_Scaun_a_Sucevei.jpg">Cezar Suceveanu</a> · <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> · {say('fotografie decupată', 'cropped photograph')}</p>
+
+  <section class="date-band" id="date-updates" aria-labelledby="date-title">
+    <div class="wrap date-band-inner">
+      <div>
+        <span class="kicker">{say('Etapa națională', 'National stage')}</span>
+        <h2 id="date-title">{dateIsKnown ? formattedStartDate : say('Data nu e încă în calendar.', 'The date is not on the calendar yet.')}</h2>
+        <p>{dateIsKnown
+          ? say(`${eventConfig.durationDays} zile la ${eventConfig.host}.`, `${eventConfig.durationDays} days at ${eventConfig.host}.`)
+          : say('Lasă-ne emailul și îți trimitem un singur mesaj când data devine oficială.', 'Leave your email and we will send one message when the date is official.')}</p>
+      </div>
+      {dateIsKnown ? (
+        <div class="date-band-actions">
+          <a class="button button-gold" href="/api/calendar.ics">{say('Adaugă în calendar', 'Add to calendar')}</a>
+          <a class="text-link" href={`/${lang}/program`}>{say('Vezi programul', 'View schedule')} <span aria-hidden="true">→</span></a>
+        </div>
+      ) : (
+        <form class="notify-form" method="post" action="/api/notify">
+          <div class="notify-row">
+            <label class="sr-only" for="notify-email">Email</label>
+            <input id="notify-email" name="email" type="email" autocomplete="email" placeholder="nume@exemplu.ro" required />
+            <button class="button button-gold" type="submit">{say('Anunță-mă', 'Notify me')}</button>
+          </div>
+          {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>}
+          <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+          <label class="checkline">
+            <input type="checkbox" name="consent" value="yes" required />
+            <span>{say('Sunt de acord ca emailul meu să fie folosit numai pentru anunțul datei ONTIC 2027. Pot retrage acordul oricând.', 'I agree that my email will only be used to announce the ONTIC 2027 date. I can withdraw consent at any time.')}</span>
+          </label>
+          <p class="status" aria-live="polite"></p>
+        </form>
+      )}
+    </div>
+  </section>
 
   <section class="section" id="discover" aria-labelledby="intro-title"><div class="wrap">
-    <div class="intro-statement" data-reveal><span class="kicker">{say('CURIOS. CREATIV. PREGĂTIT.', 'CURIOUS. CREATIVE. READY.')}</span><h2 id="intro-title">{say('Mai mult decât un concurs.', 'More than a competition.')} <span>{say('Locul în care pasiunea pentru tehnologie prinde formă.', 'Where a passion for technology takes shape.')}</span></h2><p>{say('Elevi din toată țara, profesori care îi inspiră și provocări care duc ideile mai departe. Ne întâlnim la Colegiul Național „Ștefan cel Mare” Suceava.', 'Students from across Romania, inspiring teachers and challenges that take ideas further. We meet at Colegiul Național „Ștefan cel Mare” in Suceava.')}</p></div>
-    <div class="fact-row" data-reveal><div><strong>5</strong><span>{say('secțiuni de concurs', 'contest sections')}</span></div><div><strong>IX–XII</strong><span>{say('clase de liceu', 'high-school grades')}</span></div><div><strong>2027</strong><span>{say('ne întâlnim la Suceava', 'see you in Suceava')}</span></div></div>
+    <div class="intro-statement" data-reveal>
+      <span class="kicker">{say('Curios. Creativ. Pregătit.', 'Curious. Creative. Ready.')}</span>
+      <h2 id="intro-title">{say('Mai mult decât un concurs.', 'More than a competition.')} <span>{say('Locul în care pasiunea pentru tehnologie prinde formă.', 'Where a passion for technology takes shape.')}</span></h2>
+      <p>{say('Elevi din toată țara, profesori care îi inspiră și provocări care duc ideile mai departe. Ne întâlnim la Colegiul Național „Ștefan cel Mare” Suceava.', 'Students from across Romania, inspiring teachers and challenges that take ideas further. We meet at Colegiul Național „Ștefan cel Mare” in Suceava.')}</p>
+    </div>
+    <div class="fact-row" data-reveal>
+      <div><strong>{eventConfig.sections.length}</strong><span>{say('secțiuni de concurs', 'contest sections')}</span></div>
+      <div><strong>{ticRankingCount} + 1</strong><span>{say('clasamente: TIC pe clase, C# comun', 'rankings: TIC by grade, one for C#')}</span></div>
+      <div><strong>{eventConfig.durationDays}</strong><span>{say('zile la Suceava', 'days in Suceava')}</span></div>
+    </div>
   </div></section>
 
   <section class="section soft-section" aria-labelledby="tracks-title"><div class="wrap">
-    <div class="section-head" data-reveal><div><span class="kicker">{say('CONCURSUL', 'THE COMPETITION')}</span><h2 id="tracks-title">{say('Talente diferite.', 'Different talents.')}<br/>{say('Aceeași ambiție.', 'The same ambition.')}</h2></div><p>{say('Alege secțiunea ta și găsește regulamentele, informațiile despre probe și rezultatele, pe măsură ce sunt publicate.', 'Find your section, its rules, contest information and results as they are published.')}</p></div>
+    <div class="section-head" data-reveal>
+      <div><span class="kicker">{say('Concursul', 'The competition')}</span><h2 id="tracks-title">{say('Talente diferite.', 'Different talents.')}<br />{say('Aceeași ambiție.', 'The same ambition.')}</h2></div>
+      <p>{say('Alege secțiunea ta și găsește regulamentele, informațiile despre probe și rezultatele, pe măsură ce sunt publicate.', 'Find your section, its rules, contest information and results as they are published.')}</p>
+    </div>
     <div class="track-grid">
-      <article class="track-card" data-reveal><div class="track-orbit" aria-hidden="true"></div><span class="kicker">{say('TEHNOLOGIA INFORMAȚIEI', 'INFORMATION TECHNOLOGY')}</span><div class="track-symbol" aria-hidden="true">TIC.</div><h3>{say('Transformă ce știi în ce poți.', 'Turn knowledge into possibility.')}</h3><p>{say('Probe practice și clasamente distincte pentru fiecare clasă. Aici, atenția la detalii întâlnește creativitatea.', 'Practical challenges and separate rankings for each grade. Where attention to detail meets creativity.')}</p><div class="grade-links">{eventConfig.sections.filter(s => s.kind === 'tic').map(s => <a href={`/${lang}/concurs/${s.id}`}>{say('Clasa ', 'Grade ')}{s.grade}</a>)}</div></article>
-      <article class="track-card violet" data-reveal><div class="track-orbit" aria-hidden="true"></div><span class="kicker">{say('PROGRAMARE', 'PROGRAMMING')}</span><div class="track-symbol" aria-hidden="true">C#</div><h3>{say('Idei care devin aplicații.', 'Ideas that become applications.')}</h3><p>{say('O secțiune comună pentru clasele IX–XII. Gândire structurată, soluții clare și bucuria de a construi.', 'One shared section for grades IX–XII. Structured thinking, clear solutions and the joy of building.')}</p><a class="button" href={`/${lang}/concurs/csharp`}>{say('Explorează secțiunea C#', 'Explore the C# section')}</a></article>
+      <article class="track-card" data-reveal>
+        <div class="track-orbit" aria-hidden="true"></div>
+        <span class="kicker">{say('Tehnologia informației', 'Information technology')}</span>
+        <div class="track-symbol" aria-hidden="true">TIC.</div>
+        <h3>{say('Transformă ce știi în ce poți.', 'Turn knowledge into possibility.')}</h3>
+        <p>{say('Probe practice și clasamente distincte pentru fiecare clasă. Aici, atenția la detalii întâlnește creativitatea.', 'Practical challenges and separate rankings for each grade. Where attention to detail meets creativity.')}</p>
+        <div class="grade-links">{eventConfig.sections.filter((section) => section.kind === 'tic').map((section) => <a href={`/${lang}/concurs/${section.id}`}>{say('Clasa ', 'Grade ')}{section.grade}</a>)}</div>
+      </article>
+      <article class="track-card violet" data-reveal>
+        <div class="track-orbit" aria-hidden="true"></div>
+        <span class="kicker">{say('Programare', 'Programming')}</span>
+        <div class="track-symbol" aria-hidden="true">C#</div>
+        <h3>{say('Idei care devin aplicații.', 'Ideas that become applications.')}</h3>
+        <p>{say('O secțiune comună pentru clasele IX–XII. Gândire structurată, soluții clare și bucuria de a construi.', 'One shared section for grades IX–XII. Structured thinking, clear solutions and the joy of building.')}</p>
+        <a class="button" href={`/${lang}/concurs/csharp`}>{say('Explorează secțiunea C#', 'Explore the C# section')}</a>
+      </article>
     </div>
   </div></section>
 
-  <section class="section"><div class="wrap"><div class="section-head" data-reveal><div><span class="kicker">{say('PENTRU PARTICIPANȚI', 'FOR PARTICIPANTS')}</span><h2>{say('Mai puține căutări.', 'Less searching.')}<br/>{say('Mai multă claritate.', 'More clarity.')}</h2></div><a class="card-link" href={`/${lang}/faq`}>{say('Întrebări frecvente', 'Frequently asked questions')}</a></div>
+  <section class="section" aria-labelledby="journey-title"><div class="wrap">
+    <div class="section-head" data-reveal>
+      <div><span class="kicker">{say('Pentru participanți', 'For participants')}</span><h2 id="journey-title">{say('Mai puține căutări.', 'Less searching.')}<br />{say('Mai multă claritate.', 'More clarity.')}</h2></div>
+      <a class="text-link" href={`/${lang}/faq`}>{say('Întrebări frecvente', 'Frequently asked questions')} <span aria-hidden="true">→</span></a>
+    </div>
     <div class="journey-grid">
-      <a class="journey-card" href={`/${lang}/program`} data-reveal><span class="journey-icon" aria-hidden="true">▦</span><h3>{say('Programul tău.', 'Your schedule.')}</h3><p>{say('De la prima întâlnire până la premiere. Urmărește structura și actualizările programului.', 'From the first meeting to the awards. Follow the schedule and its updates.')}</p><span class="card-link">{say('Vezi programul', 'View schedule')}</span></a>
-      <a class="journey-card" href={`/${lang}/participare`} data-reveal><span class="journey-icon" aria-hidden="true">✓</span><h3>{say('Totul pregătit.', 'Ready to take part.')}</h3><p>{say('Informații pentru elevi, profesori și delegații, adunate într-un singur loc.', 'Information for students, teachers and delegations, all in one place.')}</p><span class="card-link">{say('Ghid de participare', 'Participation guide')}</span></a>
-      <a class="journey-card" href={`/${lang}/locatii`} data-reveal><span class="journey-icon" aria-hidden="true">⌖</span><h3>{say('Ajungi mai ușor.', 'Find your way.')}</h3><p>{say('Locații, cazare și harta live TPL, ca să te orientezi ușor în Suceava.', 'Venues, accommodation and the live TPL map to help you navigate Suceava.')}</p><span class="card-link">{say('Locații și transport', 'Venues and transport')}</span></a>
+      <a class="journey-card" href={`/${lang}/program`} data-reveal><span class="journey-icon" aria-hidden="true">▦</span><h3>{say('Programul tău.', 'Your schedule.')}</h3><p>{say('De la prima întâlnire până la premiere. Urmărește structura și actualizările programului.', 'From the first meeting to the awards. Follow the schedule and its updates.')}</p><span class="text-link">{say('Vezi programul', 'View schedule')} <span aria-hidden="true">→</span></span></a>
+      <a class="journey-card" href={`/${lang}/participare`} data-reveal><span class="journey-icon" aria-hidden="true">✓</span><h3>{say('Totul pregătit.', 'Ready to take part.')}</h3><p>{say('Informații pentru elevi, profesori și delegații, adunate într-un singur loc.', 'Information for students, teachers and delegations, all in one place.')}</p><span class="text-link">{say('Ghid de participare', 'Participation guide')} <span aria-hidden="true">→</span></span></a>
+      <a class="journey-card" href={`/${lang}/locatii`} data-reveal><span class="journey-icon" aria-hidden="true">⌖</span><h3>{say('Ajungi mai ușor.', 'Find your way.')}</h3><p>{say('Locații, cazare și harta live TPL, ca să te orientezi ușor în Suceava.', 'Venues, accommodation and the live TPL map to help you navigate Suceava.')}</p><span class="text-link">{say('Locații și transport', 'Venues and transport')} <span aria-hidden="true">→</span></span></a>
     </div>
   </div></section>
 
-  <section class="section soft-section"><div class="wrap destination-feature">
-    <figure data-reveal><img src={fortress} width="1280" height="960" loading="lazy" decoding="async" alt={say('Zidurile Cetății de Scaun, în Suceava', 'The walls of the Seat Fortress in Suceava')}/><figcaption class="photo-credit"><a href="https://commons.wikimedia.org/wiki/File:Cetatea_de_Scaun_a_Sucevei.jpg">Cezar Suceveanu</a> · <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> · {say('decupată', 'cropped')}</figcaption></figure>
-    <div data-reveal><span class="kicker">{say('DINCOLO DE CONCURS', 'BEYOND THE COMPETITION')}</span><h2>{say('Închide laptopul.', 'Close your laptop.')}<br/>{say('Deschide orizontul.', 'Open your horizons.')}</h2><p>{say('Cetatea de Scaun, străzi cu povești și ospitalitatea Bucovinei. Între două provocări, descoperă locul care ne aduce împreună.', 'The Seat Fortress, streets full of stories and Bucovina’s hospitality. Between challenges, discover the place that brings us together.')}</p><a class="button" href={`/${lang}/bucovina`}>{say('Descoperă Suceava', 'Discover Suceava')}</a><div class="destination-links"><a class="card-link" href="https://visitsuceava.ro/" target="_blank" rel="noreferrer">Visit Suceava</a><a class="card-link" href="https://harta.tpl-sv.ro:8888/" target="_blank" rel="noreferrer">{say('Harta TPL live', 'Live TPL map')}</a></div></div>
+  <section class="section soft-section heritage-section" aria-labelledby="destination-title"><div class="wrap destination-feature">
+    <figure data-reveal>
+      <img src={voronetPhoto} width="1280" height="853" loading="lazy" decoding="async" alt={say('Mănăstirea Voroneț, cu picturile exterioare albastre', 'Voroneț Monastery with its blue exterior paintings')} />
+      <figcaption class="photo-credit"><a href="https://commons.wikimedia.org/wiki/File:Voronet_Monastery.JPG">Aupaelfary</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/ro/">CC BY-SA 3.0 RO</a></figcaption>
+    </figure>
+    <div data-reveal>
+      <span class="kicker">{say('Dincolo de concurs', 'Beyond the competition')}</span>
+      <h2 id="destination-title">{say('Închide laptopul.', 'Close your laptop.')}<br />{say('Deschide orizontul.', 'Open your horizons.')}</h2>
+      <p>{say('Cetatea de Scaun, mănăstirile pictate și ospitalitatea Bucovinei. Între două provocări, descoperă locul care ne aduce împreună.', 'The Seat Fortress, the painted monasteries and Bucovina’s hospitality. Between challenges, discover the place that brings us together.')}</p>
+      <a class="button" href={`/${lang}/bucovina`}>{say('Descoperă Bucovina', 'Discover Bucovina')}</a>
+      <div class="destination-links">
+        <a class="text-link" href="https://visitsuceava.ro/" target="_blank" rel="noreferrer">Visit Suceava <span aria-hidden="true">↗</span></a>
+        <a class="text-link" href="https://harta.tpl-sv.ro:8888/" target="_blank" rel="noreferrer">{say('Harta TPL live', 'Live TPL map')} <span aria-hidden="true">↗</span></a>
+      </div>
+    </div>
   </div></section>
 
-  <section class="section"><div class="wrap"><div class="section-head" data-reveal><div><span class="kicker">{say('LA CURENT', 'STAY INFORMED')}</span><h2>{say('Următorul pas începe aici.', 'The next step starts here.')}</h2></div><a class="card-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All updates')}</a></div><div class="updates-grid">{news.slice(0,3).map(n => <article class="update-card" data-reveal><span class="kicker">{ro ? n.category : n.enCategory || n.category}</span><h3>{ro ? n.title : n.enTitle || n.title}</h3><p>{ro ? n.text : n.enText || n.text}</p><a class="card-link" href={`/${lang}/stiri/${n.slug}`}>{say('Citește anunțul', 'Read announcement')}</a></article>)}</div></div></section>
+  <section class="section" aria-labelledby="news-title"><div class="wrap">
+    <div class="section-head" data-reveal>
+      <div><span class="kicker">{say('La curent', 'Stay informed')}</span><h2 id="news-title">{say('Noutăți', 'Updates')}</h2></div>
+      <a class="text-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All updates')} <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="news-list" role="list">
+      {news.slice(0, 3).map((item) => (
+        <li data-reveal>
+          <a href={`/${lang}/stiri/${item.slug}`}>
+            <span class="kicker">{ro ? item.category : item.enCategory || item.category}</span>
+            <strong>{ro ? item.title : item.enTitle || item.title}</strong>
+            <span class="news-arrow" aria-hidden="true">→</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div></section>
 
-  <section class="section section-tight" id="notify"><div class="wrap closing-panel" data-reveal><span class="kicker">ONTIC 2027</span><h2>{say('Viitoarea ta provocare.', 'Your next challenge.')}<br/>{say('O experiență de ținut minte.', 'An experience to remember.')}</h2><p>{say('Calendarul și detaliile participării vor fi publicate după confirmarea organizatorilor. Găsești toate actualizările aici.', 'Dates and participation details will be published once confirmed by the organizers. Find every update here.')}</p><a class="button" href={`/${lang}/participare`}>{say('Informații pentru participanți', 'Participant information')}</a></div></section>
-  <section class="section"><div class="wrap"><span class="kicker">{say('ÎMPREUNĂ PENTRU EDUCAȚIE', 'TOGETHER FOR EDUCATION')}</span><div class="partners" style="margin-top:25px"><div class="partner"><strong>{say('Organizator național', 'National organizer')}</strong><p>Ministerul Educației și Cercetării</p></div><div class="partner"><strong>{say('Organizator județean', 'County organizer')}</strong><p>Inspectoratul Școlar Județean Suceava</p></div><div class="partner"><strong>{say('Gazdă', 'Host')}</strong><p>{eventConfig.host}</p></div></div></div></section>
-<section class="section section-dark date-config" id="date-updates"><div class="wrap"><span class="kicker">ONTIC 2027</span><h2>{dateIsKnown ? (lang === 'ro' ? 'Ne vedem la Suceava.' : 'See you in Suceava.') : (lang === 'ro' ? 'Data nu e încă în calendar.' : 'The date is not on the calendar yet.')}</h2><p>{dateIsKnown ? (lang === 'ro' ? 'Data este publicată. Consultă programul și adaugă evenimentul în calendar.' : 'The date is official. View the schedule and add the event to your calendar.') : (lang === 'ro' ? 'Lasă-ne emailul și îți trimitem o notificare când data devine oficială.' : 'Leave your email and we will send an update when the date is official.')}</p>{!dateIsKnown && <form method="post" action="/api/notify"><label class="sr-only" for="notify-email">Email</label><input id="notify-email" name="email" type="email" autocomplete="email" placeholder="nume@exemplu.ro" required />{import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>}<label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label><label class="checkline" style="text-align:left"><input type="checkbox" name="consent" value="yes" required /><span>{lang === 'ro' ? 'Sunt de acord ca adresa mea de email să fie folosită numai pentru notificarea despre data ONTIC 2027. Pot retrage acordul oricând.' : 'I agree that my email will only be used for an ONTIC 2027 date update. I can withdraw consent at any time.'}</span></label><button class="button" type="submit">{lang === 'ro' ? 'Anunță-mă când se publică data' : 'Notify me when announced'}</button><p class="status" aria-live="polite"></p></form>}</div></section>
+  <section class="section section-tight" aria-labelledby="partners-title"><div class="wrap">
+    <span class="kicker" id="partners-title">{say('Împreună pentru educație', 'Together for education')}</span>
+    <div class="partners">
+      <div class="partner"><strong>{say('Organizator național', 'National organizer')}</strong><p>Ministerul Educației și Cercetării</p></div>
+      <div class="partner"><strong>{say('Organizator județean', 'County organizer')}</strong><p>Inspectoratul Școlar Județean Suceava</p></div>
+      <div class="partner"><strong>{say('Gazdă', 'Host')}</strong><p>{eventConfig.host}</p></div>
+    </div>
+  </div></section>
 </Base>
+
 <script>
-// @ts-nocheck
-const heroTimer=document.querySelector('#hero-countdown');if(heroTimer){const target=new Date(heroTimer.dataset.date).getTime(),ro=document.documentElement.lang==='ro';const update=()=>{const ms=target-Date.now();heroTimer.textContent=ms<=0?'ONTIC 2027 · Start':`${ro?'Mai sunt':'Starts in'} ${Math.floor(ms/86400000)} ${ro?'zile':'days'} · ${Math.floor(ms%86400000/3600000)} ${ro?'ore':'hours'}`};update();setInterval(update,60000)}
-const form=document.querySelector('.date-config form');form?.addEventListener('submit',async e=>{e.preventDefault();const f=e.currentTarget;const status=f.querySelector('.status');try{const r=await fetch(f.action,{method:'POST',body:new FormData(f)});const d=await r.json();status.textContent=d.message; if(r.ok)f.reset()}catch{status.textContent='Nu s-a putut trimite. Încearcă din nou mai târziu.'}});
+  // Sends the date-notification form without leaving the page and shows the server's reply.
+  const notifyForm = document.querySelector<HTMLFormElement>('.notify-form');
+  const FALLBACK_ERROR = document.documentElement.lang === 'ro'
+    ? 'Nu s-a putut trimite. Încearcă din nou mai târziu.'
+    : 'Could not send. Please try again later.';
+
+  notifyForm?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const status = notifyForm.querySelector('.status');
+    if (!status) return;
+    try {
+      const response = await fetch(notifyForm.action, { method: 'POST', body: new FormData(notifyForm) });
+      const result = await response.json();
+      status.textContent = result.message;
+      if (response.ok) notifyForm.reset();
+    } catch (error) {
+      console.error('Notify form failed', error);
+      status.textContent = FALLBACK_ERROR;
+    }
+  });
 </script>
-
-
