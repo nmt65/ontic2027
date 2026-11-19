@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/editorial.css';
+import '../styles/premium.css';
 import { eventConfig } from '../event.config';
 import { copy } from '../content/site';
 const { title = 'ONTIC 2027', description = 'Olimpiada Națională de Tehnologia Informației și Comunicațiilor · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en' };
@@ -31,10 +32,10 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
     <header class="site-header"><div class="header-inner">
       <a class="brand" href={`/${lang}`} aria-label={`ONTIC 2027 — ${eventConfig.shortHost}`}><img src="/ontic-logo.svg" width="50" height="50" alt="" /><span class="brand-word"><strong>ONTIC<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b class="sr-only">Meniu / Menu</b></button>
-      <nav id="main-nav" aria-label="Navigare principală"><div class="nav-links">{t.nav.map(([label, href]) => <a href={`/${lang}${href}`} class:list={{ active: path === href || (href === '/concurs' && path.startsWith('/concurs')) }}>{label}</a>)}</div>
+      <nav id="main-nav" aria-label={lang === 'ro' ? 'Navigare principală' : 'Main navigation'}><div class="nav-links">{t.nav.filter(([,href]) => ['/despre','/participare','/program','/concurs','/bucovina'].includes(href)).map(([label, href]) => <a href={`/${lang}${href}`} class:list={{ active: path === href || (href === '/concurs' && path.startsWith('/concurs')) }}>{label}</a>)}</div><details class="more-nav"><summary>{lang === 'ro' ? 'Explorează' : 'Explore'}</summary><div class="more-links">{t.nav.filter(([,href]) => !['/despre','/participare','/program','/concurs','/bucovina'].includes(href)).map(([label,href]) => <a href={`/${lang}${href}`}>{label}</a>)}</div></details>
         <div class="nav-tools"><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'EN' : 'RO'}</a><button class="theme-toggle" aria-label="Schimbă tema luminoasă/întunecată" title="Schimbă tema"><span aria-hidden="true">◐</span></button></div>
       </nav>
-    </div></header>
+    </div><div class="scroll-progress" aria-hidden="true"></div></header>
     <main id="main"><slot /></main>
     <footer class="site-footer"><div class="footer-main wrap">
       <div class="footer-brand"><a class="brand" href={`/${lang}`}><img src="/ontic-logo.svg" width="50" height="50" alt="" /><span class="brand-word"><strong>ONTIC<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a><p>{t.footerTag}</p></div>
@@ -56,7 +57,10 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       document.querySelectorAll('[data-cookie]').forEach(b => b.addEventListener('click', () => { localStorage.setItem('ontic-cookie-choice', b.dataset.cookie); banner.hidden = true; if (b.dataset.cookie === 'all') loadAnalytics(); }));
     </script>
     <script>import '../scripts/maps';</script>
+    <button class="back-top" type="button" hidden aria-label={lang === 'ro' ? 'Înapoi sus' : 'Back to top'}>⌃</button>
+    <script>import '../scripts/experience';</script>
   </body>
 </html>
+
 
 
