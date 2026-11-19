@@ -11,7 +11,7 @@
     "check": "astro check"
   },
   "dependencies": {
-    "@astrojs/node": "^11.1.12",
+    "@astrojs/vercel": "^11.0.22",
     "astro": "^7.4.11",
     "leaflet": "^1.9.4"
   },
@@ -24,3 +24,5 @@
     "typescript": "^5.9.2"
   }
 }
+
+

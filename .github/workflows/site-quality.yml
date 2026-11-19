@@ -1,9 +1,11 @@
 name: Site quality
-on:
+"on":
   push:
-    branches: [codex/editorial-redesign]
+    branches:
+      - "codex/editorial-redesign"
   pull_request:
-    branches: [main]
+    branches:
+      - main
 permissions:
   contents: read
 jobs:
@@ -26,3 +28,5 @@ jobs:
           for route in ro en ro/program en/program ro/concurs ro/participare ro/bucovina; do
             curl --fail --silent "http://127.0.0.1:4321/$route" > /dev/null || exit 1
           done
+
+

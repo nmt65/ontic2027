@@ -15,4 +15,12 @@ These are archival destination photographs, not photographs of the 2027 event.
 
 ## Verification
 Local dependency installation succeeds, but Windows Application Control blocks Astro's satteri native module. Do not disable that policy. GitHub Actions runs the lockfile installation, Astro check/build and localized route smoke tests on Ubuntu. Desktop/mobile visual QA remains required.
-The Node SSR adapter and file-based editorial storage are retained; deployment requires a compatible Node host and persistent data volume as documented in README.md.
+The site now uses Astro's official Vercel adapter for SSR and on-demand routes. File-based editorial storage remains unchanged and still needs a persistent data strategy before live editing is enabled in production.
+
+## Participant resources
+- Official Suceava tourism portal and attraction information: https://visitsuceava.ro/
+- Official TPL live transport map: https://harta.tpl-sv.ro:8888/
+- Airport transfer and local transport guidance are linked to their current Visit Suceava pages.
+- Additional Wikimedia photographs are visibly attributed on the Bucovina page: Voroneț Monastery by Aupaelfary (CC BY-SA 3.0 RO) and the Bucovina Village Museum by Georgiana Tudorica (CC BY-SA 3.0).
+
+
