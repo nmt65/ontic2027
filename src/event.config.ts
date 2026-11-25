@@ -1,5 +1,5 @@
 export const eventConfig = {
-  name: 'ONTIC 2027',
+  name: 'ONTI 2027',
   fullName: 'Olimpiada Națională de Tehnologia Informației și Comunicațiilor',
   host: 'Colegiul Național „Ștefan cel Mare” Suceava',
   shortHost: 'CNSCM Suceava',

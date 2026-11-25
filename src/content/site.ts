@@ -6,27 +6,27 @@ export const copy = {
     heroText: 'Cinci secțiuni, o comunitate de tineri care construiesc lumea digitală. Ne întâlnim la Suceava, în 2027.',
     dateUnknown: 'Data urmează să fie anunțată',
     homeIntro: 'Un loc pentru idei care prind formă',
-    homeBody: 'ONTIC aduce împreună elevi pasionați de tehnologie, profesori și comunități din toată țara. Etapa națională 2027 va avea loc la Suceava, cu Colegiul Național „Ștefan cel Mare” gazdă.',
+    homeBody: 'ONTI aduce împreună elevi pasionați de tehnologie, profesori și comunități din toată țara. Etapa națională 2027 va avea loc la Suceava, cu Colegiul Național „Ștefan cel Mare” gazdă.',
     faqTitle: 'Întrebări pe care le auzim des',
     footerTag: 'Tehnologie cu rădăcini. Idei fără granițe.'
   },
   en: {
     nav: [['About', '/despre'], ['Participation', '/participare'], ['Venues & stay', '/locatii'], ['Bucovina', '/bucovina'], ['Travel', '/calatorie'], ['Schedule', '/program'], ['Contest', '/concurs'], ['Gallery', '/galerie'], ['News', '/stiri'], ['FAQ', '/faq'], ['Contact', '/contact']] as const,
-    heroEyebrow: 'National Olympiad in Information and Communication Technology',
+    heroEyebrow: 'National Olympiad in Information Technology',
     heroTitle: 'Ideas in code.<br/>Roots in Bucovina.',
     heroText: 'Five sections, one community of young people shaping the digital world. We meet in Suceava, Romania, in 2027.',
     dateUnknown: 'Date to be announced',
     homeIntro: 'A place where ideas take shape',
-    homeBody: 'ONTIC brings together students passionate about technology, teachers, and communities from across Romania. The 2027 national stage will take place in Suceava, hosted by Colegiul Național „Ștefan cel Mare”.',
+    homeBody: 'ONTI brings together students passionate about technology, teachers, and communities from across Romania. The 2027 national stage will take place in Suceava, hosted by Colegiul Național „Ștefan cel Mare”.',
     faqTitle: 'Frequently asked questions',
     footerTag: 'Technology with roots. Ideas without borders.'
   }
 } as const;
 
 export const faq = [
-  { q: 'Când are loc ONTIC 2027?', a: 'Data nu a fost anunțată încă. Înscrie-te la notificarea prin email și te anunțăm când este publicată.', enq: 'When is ONTIC 2027?', ena: 'The date has not been announced yet. Sign up for an email update and we will let you know when it is published.' },
+  { q: 'Când are loc ONTI 2027?', a: 'Data nu a fost anunțată încă. Înscrie-te la notificarea prin email și te anunțăm când este publicată.', enq: 'When is ONTI 2027?', ena: 'The date has not been announced yet. Sign up for an email update and we will let you know when it is published.' },
   { q: 'Cum mă calific la etapa națională?', a: 'Calificarea se face prin etapele locale și județene, conform regulamentului oficial în vigoare. Consultă profesorul coordonator și inspectoratul școlar.', enq: 'How do I qualify for the national stage?', ena: 'Qualification follows local and county stages under the applicable official rules. Check with your teacher and county school inspectorate.' },
-  { q: 'Care este diferența dintre TIC și C#?', a: 'TIC este o secțiune practică de tehnologia informației, cu clasamente distincte pentru clasele IX, X, XI și XII. C# este o secțiune comună claselor IX–XII, cu clasament comun. ONTIC nu este Olimpiada Națională de Informatică (ONI), care are altă disciplină și alt format.', enq: 'What is the difference between TIC and C#?', ena: 'TIC is a practical information technology section with separate IX, X, XI and XII rankings. C# is one section for grades IX–XII with a shared ranking. ONTIC is distinct from Romania’s National Olympiad in Informatics (ONI), which has a different subject and format.' },
+  { q: 'Care este diferența dintre TIC și C#?', a: 'TIC este o secțiune practică de tehnologia informației, cu clasamente distincte pentru clasele IX, X, XI și XII. C# este o secțiune comună claselor IX–XII, cu clasament comun. ONTI nu este Olimpiada Națională de Informatică (ONI), care are altă disciplină și alt format.', enq: 'What is the difference between TIC and C#?', ena: 'TIC is a practical information technology section with separate IX, X, XI and XII rankings. C# is one section for grades IX–XII with a shared ranking. ONTI is distinct from Romania’s National Olympiad in Informatics (ONI), which has a different subject and format.' },
   { q: 'Ce trebuie să aduc la concurs?', a: 'Lista oficială va fi publicată înainte de eveniment. Până atunci, nu presupune că dispozitivele personale sunt permise; urmează instrucțiunile comisiei.', enq: 'What should I bring?', ena: 'The official list will be published before the event. Until then, do not assume personal devices are allowed; follow the committee’s instructions.' },
   { q: 'Unde se desfășoară probele?', a: 'Locația principală anunțată este Colegiul Național „Ștefan cel Mare” Suceava. Sălile exacte vor fi publicate ulterior.', enq: 'Where will the contest take place?', ena: 'The announced main venue is Colegiul Național „Ștefan cel Mare” Suceava. Room details will follow.' },
   { q: 'Cum confirm participarea?', a: 'Formularul și termenul limită vor fi publicate în pagina Participare după validarea lor de către organizatori.', enq: 'How do I confirm attendance?', ena: 'The form and deadline will appear on the Participation page once confirmed by the organizers.' },
@@ -41,11 +41,11 @@ export const faq = [
   { q: 'Cum solicit accesibilizări?', a: 'Contactează echipa de organizare cât mai devreme la [DE COMPLETAT: email], cu detaliile necesare planificării. Informațiile vor fi tratate cu grijă.', enq: 'How do I request accessibility support?', ena: 'Contact the organizing team early at [TO BE COMPLETED: email] with details needed for planning. Information will be handled carefully.' },
   { q: 'Cum se folosește mediul de lucru C#?', a: 'Versiunea .NET, IDE-ul, bibliotecile și limitările sunt [DE COMPLETAT] și vor apărea în regulamentul secțiunii.', enq: 'Which C# environment will be used?', ena: '.NET version, IDE, libraries and restrictions are [TO BE COMPLETED] and will appear in the section rules.' },
   { q: 'Cum mă înscriu pentru noutăți despre dată?', a: 'Folosește formularul de pe pagina principală. Emailul este utilizat doar pentru notificarea solicitată și poate fi șters printr-o cerere.', enq: 'How do I get date updates?', ena: 'Use the form on the home page. Your email is used only for the requested update and can be deleted on request.' },
-  { q: 'Cine organizează ONTIC 2027?', a: 'Ministerul Educației și Cercetării, Inspectoratul Școlar Județean Suceava și CNSCM Suceava sunt organizatorii menționați. Partenerii se vor publica după confirmare.', enq: 'Who organizes ONTIC 2027?', ena: 'The Ministry of Education and Research, Suceava County School Inspectorate and CNSCM Suceava are the named organizers. Partners will be published once confirmed.' }
+  { q: 'Cine organizează ONTI 2027?', a: 'Ministerul Educației și Cercetării, Inspectoratul Școlar Județean Suceava și CNSCM Suceava sunt organizatorii menționați. Partenerii se vor publica după confirmare.', enq: 'Who organizes ONTI 2027?', ena: 'The Ministry of Education and Research, Suceava County School Inspectorate and CNSCM Suceava are the named organizers. Partners will be published once confirmed.' }
 ];
 
 export const news = [
-  { date: '[DE COMPLETAT: data]', category: 'Anunț', title: 'Suceava găzduiește etapa națională ONTIC 2027', text: 'Colegiul Național „Ștefan cel Mare” Suceava va fi gazda elevilor calificați din întreaga țară. Informațiile logistice vor fi publicate pe măsură ce sunt confirmate.', enCategory: 'Announcement', enTitle: 'Suceava to host the ONTIC 2027 national stage', enText: 'Colegiul Național „Ștefan cel Mare” Suceava will welcome qualified students from across Romania. Logistics will be published as details are confirmed.', slug: 'suceava-gazduieste-ontic-2027' },
+  { date: '[DE COMPLETAT: data]', category: 'Anunț', title: 'Suceava găzduiește etapa națională ONTI 2027', text: 'Colegiul Național „Ștefan cel Mare” Suceava va fi gazda elevilor calificați din întreaga țară. Informațiile logistice vor fi publicate pe măsură ce sunt confirmate.', enCategory: 'Announcement', enTitle: 'Suceava to host the ONTI 2027 national stage', enText: 'Colegiul Național „Ștefan cel Mare” Suceava will welcome qualified students from across Romania. Logistics will be published as details are confirmed.', slug: 'suceava-gazduieste-ontic-2027' },
   { date: '[DE COMPLETAT: data]', category: 'Concurs', title: 'Cinci secțiuni, clasamente clare', text: 'Patru clasamente TIC, câte unul pentru fiecare clasă de liceu, și un clasament comun C# pentru clasele IX–XII.', enCategory: 'Contest', enTitle: 'Five sections, clear rankings', enText: 'Four separate TIC rankings, one per grade, and one shared C# ranking for grades IX–XII.', slug: 'sectiuni-ontic-2027' },
   { date: '[DE COMPLETAT: data]', category: 'Participare', title: 'Urmărește publicarea datei', text: 'Data etapei naționale este în curs de confirmare. Abonează-te la notificare și primești un singur mesaj când informația devine oficială.', enCategory: 'Participation', enTitle: 'Follow the date announcement', enText: 'The national stage date is being confirmed. Sign up for a notification and receive one message when it becomes official.', slug: 'data-ontic-2027' }
 ];
@@ -53,7 +53,7 @@ export const news = [
 export const schedule = [
   { day: 1, en: 'Day 1', title: 'Sosire și primire', items: ['Primirea delegațiilor · [DE COMPLETAT: interval]', 'Înregistrare și verificarea documentelor', 'Întâlnire de bun venit și informații logistice'] },
   { day: 2, en: 'Day 2', title: 'Deschidere și acomodare', items: ['Deschiderea oficială · [DE COMPLETAT: oră]', 'Turul spațiilor de concurs', 'Întâlniri pentru elevi și profesori'] },
-  { day: 3, en: 'Day 3', title: 'Proba de concurs', items: ['Acces în săli · [DE COMPLETAT: oră]', 'Probă practică TIC / C# · durată [DE COMPLETAT]', 'Program cultural pentru însoțitori'] },
+  { day: 3, en: 'Day 3', title: 'Proba de concurs, 5 ore', items: ['Acces în săli · [DE COMPLETAT: oră]', 'Probă practică TIC / C# · durată [DE COMPLETAT]', 'Program cultural pentru însoțitori'] },
   { day: 4, en: 'Day 4', title: 'Evaluare și contestații', items: ['Publicarea rezultatelor inițiale', 'Vizualizarea lucrărilor și contestații · conform regulamentului', 'Activități în Suceava și Bucovina'] },
   { day: 5, en: 'Day 5', title: 'Premiere și plecare', items: ['Publicarea rezultatelor finale', 'Festivitatea de premiere · [DE COMPLETAT: oră]', 'Plecarea delegațiilor'] }
 ];

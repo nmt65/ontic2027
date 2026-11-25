@@ -1,0 +1,10 @@
+---
+// A stitched chevron that links to the next section.
+interface Props { href: string; label: string }
+const { href, label } = Astro.props;
+const steps = [[0, 0], [2, 2], [4, 4], [6, 2], [8, 0]];
+const d = steps.map(([x, y]) => `M${x} ${y}h2v2H${x}z`).join('');
+---
+<a class="h-cue" href={href} aria-label={label} data-scroll-cue>
+  <svg width="40" height="24" viewBox="0 0 10 6" aria-hidden="true" focusable="false"><path fill="var(--gold)" d={d}></path></svg>
+</a>

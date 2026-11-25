@@ -1,0 +1,82 @@
+/* Motion, "Cusut în cod": stepped, small, hand-timed, like a needle through cloth.
+   Every hidden-before-animation state is scoped under .motion-ready (added only when JS runs and motion is allowed). */
+
+/* Shared stitch keyframes: a pixel appears in one step */
+/* Hold the final value from 1%: with steps() a finished animation can sit at progress 0.9999 and snap back to the start value. */
+@keyframes st-pix { 0% { opacity: 0; } 1%, 100% { opacity: 1; } }
+@keyframes st-box { 0% { opacity: 0.22; } 1%, 100% { opacity: 1; } }
+@keyframes st-tug { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+
+/* Needle order delays (ms). Gaps are deliberately uneven: a hand pulls the thread, it does not tick like a clock. */
+[data-stitch-x] rect:nth-child(1), .h-tick rect:nth-child(1) { --d: 0ms; }
+[data-stitch-x] rect:nth-child(2), .h-tick rect:nth-child(2) { --d: 80ms; }
+[data-stitch-x] rect:nth-child(3), .h-tick rect:nth-child(3) { --d: 190ms; }
+[data-stitch-x] rect:nth-child(4), .h-tick rect:nth-child(4) { --d: 260ms; }
+[data-stitch-x] rect:nth-child(5), .h-tick rect:nth-child(5) { --d: 370ms; }
+[data-stitch-x] rect:nth-child(6), .h-tick rect:nth-child(6) { --d: 520ms; } /* needle turns for the second diagonal: longer pause */
+[data-stitch-x] rect:nth-child(7) { --d: 600ms; }
+[data-stitch-x] rect:nth-child(8) { --d: 720ms; }
+[data-stitch-x] rect:nth-child(9) { --d: 790ms; }
+
+/* 1. Hero photo drift */
+.motion-ready [data-hero-photo] { animation: h-drift 40s ease-in-out infinite alternate; }
+@keyframes h-drift { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.04) translate(-0.6%, -0.8%); } }
+
+/* 2 + 4. Date marker and programme day markers: box first, then the X pixel by pixel */
+.motion-ready :is([data-stitch-mark], [data-day-mark]):not(.is-stitched) [data-stitch-box] { opacity: 0.22; }
+.motion-ready :is([data-stitch-mark], [data-day-mark]):not(.is-stitched) [data-stitch-x] rect { opacity: 0; }
+.motion-ready :is([data-stitch-mark], [data-day-mark]).is-stitched [data-stitch-box] { animation: st-box 1ms steps(1) var(--t0, 0ms) both; }
+.motion-ready :is([data-stitch-mark], [data-day-mark]).is-stitched [data-stitch-x] rect {
+  animation: st-pix 1ms steps(1) calc(var(--t0, 0ms) + 160ms + var(--d)) both;
+}
+/* Contest day: the last red stitch is pulled tight, one small tug */
+.motion-ready .is-contest [data-day-mark].is-stitched [data-stitch-x] rect:nth-child(9) {
+  transform-box: fill-box; transform-origin: center;
+  animation:
+    st-pix 1ms steps(1) calc(var(--t0, 0ms) + 160ms + var(--d)) both,
+    st-tug 300ms steps(1) calc(var(--t0, 0ms) + 260ms + var(--d)) both;
+}
+.h-hero-date { --t0: 350ms; }
+
+/* 3. Scroll cue: two pushes down, held, back up; stops for good after the first scroll */
+.motion-ready .h-cue svg { animation: h-cue 1.4s steps(2) infinite; }
+.motion-ready .h-cue.is-done svg { animation: none; opacity: 0.55; transition: opacity 300ms; }
+@keyframes h-cue { 0% { transform: translateY(0); } 40% { transform: translateY(8px); } 55% { transform: translateY(8px); } 100% { transform: translateY(0); } }
+
+/* 5. Footer embroidery sewn once, left to right, one motif repeat per step, with two hesitations.
+   motion.ts sets --step (motif width), --k1/--k2/--kn (repeats covered at each plateau) and --s1..--s3 (steps per run). */
+.motion-ready [data-embroidery]:not(.is-stitched) svg { clip-path: inset(0 100% 0 0); }
+.motion-ready [data-embroidery].is-stitched:not(.is-sewn) svg { animation: ie-sew 1.6s linear both; }
+.motion-ready [data-embroidery].is-sewn svg { animation: none; clip-path: none; }
+@keyframes ie-sew {
+  0% { clip-path: inset(0 100% 0 0); animation-timing-function: steps(var(--s1)); }
+  38% { clip-path: inset(0 calc(100% - var(--k1) * var(--step)) 0 0); animation-timing-function: linear; }
+  48% { clip-path: inset(0 calc(100% - var(--k1) * var(--step)) 0 0); animation-timing-function: steps(var(--s2)); }
+  74% { clip-path: inset(0 calc(100% - var(--k2) * var(--step)) 0 0); animation-timing-function: linear; }
+  83% { clip-path: inset(0 calc(100% - var(--k2) * var(--step)) 0 0); animation-timing-function: steps(var(--s3)); }
+  100% { clip-path: inset(0 calc(100% - var(--kn) * var(--step)) 0 0); }
+}
+/* The gold centres catch the light once the cloth is done */
+.motion-ready [data-embroidery].is-stitched [data-embroidery-motif=gold] { animation: ie-gold 800ms steps(2) 1.75s 1; }
+@keyframes ie-gold { 0% { opacity: 1; } 50% { opacity: 0.6; } 99%, 100% { opacity: 1; } }
+
+/* 6. Tactile UI: presses are quick and never linger */
+.button, .h-submit { transition: transform 80ms steps(1), background-color 120ms; }
+.button:active, .h-submit:active { transform: translateY(1px); background: #7A1812; border-color: #7A1812; color: #fff; }
+.button-gold:active { background: #C4902F; border-color: #C4902F; color: var(--forest); }
+.button-outline:active, .button-quiet:active { background: transparent; color: var(--red-text); border-color: currentColor; }
+a { transition: text-decoration-thickness 120ms; }
+.h-card .card-bar { transition: transform 150ms steps(2); }
+.h-card:hover .card-bar, .h-card:focus-within .card-bar { transform: scaleY(1.667); } /* 6px to 10px */
+:focus-visible { transition: none; }
+
+/* 7. Form success: a small stitched tick next to the heading, sewn when the panel is shown */
+.h-tick { display: inline-block; width: 0.8em; height: 0.8em; margin-left: 0.45em; vertical-align: -0.05em; fill: var(--forest); }
+html[data-theme=dark] .h-tick { fill: var(--gold); }
+.motion-ready [data-form-success]:not([hidden]) .h-tick rect { animation: st-pix 1ms steps(1) calc(150ms + var(--d)) both; }
+
+/* Reduced motion: final state at once, nothing animates (motion.ts also drops .motion-ready) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  [data-embroidery] svg { clip-path: none !important; }
+}

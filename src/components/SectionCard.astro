@@ -1,0 +1,13 @@
+---
+// One contest section: colour bar, big mark in a darker ink, title, rules link.
+interface Props { href: string; color: string; mark: string; markLight: string; markDark: string; title: string; cta: string; wide?: boolean }
+const { href, color, mark, markLight, markDark, title, cta, wide = false } = Astro.props;
+---
+<article class:list={['h-card', { 'h-card-wide': wide }]} style={`--bar:${color};--mark:${markLight};--mark-dark:${markDark}`}>
+  <span class="card-bar" aria-hidden="true"></span>
+  <a class="h-card-link" href={href}>
+    <span class="h-card-mark">{mark}</span>
+    <strong class="h-card-title">{title}</strong>
+    <span class="h-card-cta">{cta}</span>
+  </a>
+</article>

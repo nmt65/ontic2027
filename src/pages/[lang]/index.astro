@@ -1,186 +1,251 @@
 ---
 import Base from '../../layouts/Base.astro';
+import StitchMark from '../../components/StitchMark.astro';
+import ScrollCue from '../../components/ScrollCue.astro';
+import SectionCard from '../../components/SectionCard.astro';
 import { eventConfig, dateIsKnown } from '../../event.config';
 import { getEditorial } from '../../lib/editorial';
+import '../../styles/home.css';
 
 const lang = Astro.params.lang as 'ro' | 'en';
 const ro = lang === 'ro';
 const say = (romanian: string, english: string) => (ro ? romanian : english);
-const { news } = await getEditorial();
+const { news, schedule } = await getEditorial();
 
-// Wikimedia Commons photographs. Credits are shown next to each image.
-const fortressPhoto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cetatea_de_Scaun_a_Sucevei.jpg/1280px-Cetatea_de_Scaun_a_Sucevei.jpg';
-const voronetPhoto = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Voronet%20Monastery.JPG?width=1280';
+// Wikimedia Commons photographs. Credits are shown on the images.
+const fortressBase = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cetatea_de_Scaun_a_Sucevei.jpg';
+const fortressPhoto = `${fortressBase}/1280px-Cetatea_de_Scaun_a_Sucevei.jpg`;
+const fortressSet = [960, 1280, 1920].map((w) => `${fortressBase}/${w}px-Cetatea_de_Scaun_a_Sucevei.jpg ${w}w`).join(', ');
+const voronetPhoto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/33/Voronet_Monastery.JPG/1280px-Voronet_Monastery.JPG';
 
-// TIC has one ranking per grade; C# has one shared ranking.
-const ticRankingCount = eventConfig.sections.filter((section) => section.kind === 'tic').length;
 const formattedStartDate = dateIsKnown
   ? new Date(eventConfig.startDate!).toLocaleDateString(ro ? 'ro-RO' : 'en-GB', { dateStyle: 'long', timeZone: 'Europe/Bucharest' })
   : null;
----
-<Base lang={lang} title={say('Acasă', 'Home')}>
-  <section class="launch-hero" aria-labelledby="launch-title">
-    <p class="hero-event"><strong>ONTIC 2027</strong><span>Suceava, România</span></p>
-    <h1 id="launch-title">{say('Viitorul începe', 'The future starts')}<br /><span>{say('cu ideile tale.', 'with your ideas.')}</span></h1>
-    <p class="hero-description">{say('Etapa națională a Olimpiadei de Tehnologia Informației și Comunicațiilor: cinci secțiuni, elevi din toată țara, o săptămână în Bucovina.', 'The national stage of Romania’s Information and Communication Technology Olympiad: five sections, students from across the country, one week in Bucovina.')}</p>
-    <div class="launch-actions">
-      <a class="button" href={`/${lang}/participare`}>{say('Ghid de participare', 'Participation guide')}</a>
-      <a class="text-link" href={`/${lang}/concurs`}>{say('Secțiuni și regulamente', 'Sections and rules')} <span aria-hidden="true">→</span></a>
-    </div>
-    <figure class="hero-landscape">
-      <img src={fortressPhoto} width="1280" height="960" fetchpriority="high" alt={say('Zidurile Cetății de Scaun a Sucevei', 'The walls of Suceava’s Seat Fortress')} />
-      <figcaption class="landscape-label"><span>{say('Un oraș cu istorie. O generație cu viitor.', 'A city with history. A generation with a future.')}</span><strong>Suceava. 2027.</strong></figcaption>
-    </figure>
-  </section>
-  <p class="photo-credit hero-credit"><a href="https://commons.wikimedia.org/wiki/File:Cetatea_de_Scaun_a_Sucevei.jpg">Cezar Suceveanu</a> · <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> · {say('fotografie decupată', 'cropped photograph')}</p>
 
-  <section class="date-band" id="date-updates" aria-labelledby="date-title">
-    <div class="wrap date-band-inner">
-      <div>
-        <span class="kicker">{say('Etapa națională', 'National stage')}</span>
-        <h2 id="date-title">{dateIsKnown ? formattedStartDate : say('Data nu e încă în calendar.', 'The date is not on the calendar yet.')}</h2>
-        <p>{dateIsKnown
-          ? say(`${eventConfig.durationDays} zile la ${eventConfig.host}.`, `${eventConfig.durationDays} days at ${eventConfig.host}.`)
-          : say('Lasă-ne emailul și îți trimitem un singur mesaj când data devine oficială.', 'Leave your email and we will send one message when the date is official.')}</p>
+// Marks use a darker ink than the bar colour so the large numerals pass 3:1; dark mode uses lighter tints.
+const inks: Record<string, { mark: string; light: string; dark: string; title: [string, string] }> = {
+  'tic-ix': { mark: 'IX', light: '#A3432A', dark: '#E8917A', title: ['Clasa a IX-a', 'Grade 9'] },
+  'tic-x': { mark: 'X', light: '#80590F', dark: '#DDAA48', title: ['Clasa a X-a', 'Grade 10'] },
+  'tic-xi': { mark: 'XI', light: '#2C5F50', dark: '#74BBA2', title: ['Clasa a XI-a', 'Grade 11'] },
+  'tic-xii': { mark: 'XII', light: '#3F5591', dark: '#92A9E3', title: ['Clasa a XII-a', 'Grade 12'] },
+  csharp: { mark: 'C#', light: '#69438C', dark: '#BC98DF', title: ['Clasele IX–XII, un clasament comun', 'Grades 9–12, one shared ranking'] }
+};
+const ticSections = eventConfig.sections.filter((s) => s.kind === 'tic');
+const csharp = eventConfig.sections.find((s) => s.kind === 'csharp')!;
+const cardProps = (s: { id: string; color: string }) => {
+  const i = inks[s.id];
+  return { href: `/${lang}/concurs/${s.id}`, color: s.color, mark: i.mark, markLight: i.light, markDark: i.dark, title: say(i.title[0], i.title[1]), cta: say('Regulamentul', 'Rules') };
+};
+
+const dayTitlesEn = ['Arrival and welcome', 'Opening and settling in', 'Contest day, five hours', 'Marking and appeals', 'Awards and departure'];
+const days = schedule.map((d, i) => ({ day: d.day, title: ro ? d.title : (dayTitlesEn[i] ?? d.en), contest: d.day === 3 }));
+
+const guideRows = [
+  { href: 'participare', title: say('Ghidul de participare', 'Participation guide'), text: say('Ce documente aduci, cum ajungi și cine te întâmpină, pentru elevi, profesori și delegații.', 'Which documents to bring, how to get here and who will greet you, for students, teachers and delegations.') },
+  { href: 'locatii', title: say('Locații și cazare', 'Venues and accommodation'), text: say('Unde dormi, unde dai proba și cum folosești harta live a autobuzelor TPL.', 'Where you sleep, where you sit the contest and how to use the live TPL bus map.') },
+  { href: 'faq', title: say('Întrebări frecvente', 'Frequently asked questions'), text: say('Răspunsuri despre probe, contestații și publicarea rezultatelor.', 'Answers about the contest, appeals and how results are published.') }
+];
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+<Base lang={lang} title={say('Acasă', 'Home')} transparentHeader>
+  <section class="h-hero on-forest" aria-labelledby="hero-title">
+    <img class="h-hero-photo" data-hero-photo src={fortressPhoto} srcset={fortressSet} sizes="100vw" width="1280" height="853" fetchpriority="high" alt={say('Zidurile Cetății de Scaun a Sucevei', 'The walls of Suceava’s Seat Fortress')} />
+    <div class="h-hero-veil" aria-hidden="true"></div>
+    <div class="h-hero-fade" aria-hidden="true"></div>
+    <div class="wrap h-hero-copy">
+      <h1 id="hero-title">{say('Un concurs. Cinci ore. Sub zidurile Cetății.', 'One contest. Five hours. Beneath the fortress walls.')}</h1>
+      <p class="h-hero-lead">{say('Etapa națională a Olimpiadei de Tehnologia Informației se ține în 2027 la Suceava. Fiecare concurent rezolvă probleme practice într-o singură probă.', 'The national stage of the National Olympiad in Information Technology takes place in Suceava in 2027. Each contestant solves practical problems in a single contest.')}</p>
+      <div class="h-hero-actions">
+        <a class="button h-hero-button" href={`/${lang}/participare`}>{say('Citește ghidul de participare', 'Read the participation guide')}</a>
+        <a class="h-hero-link" href="#sectiuni">{say('Secțiuni și regulamente', 'Sections and rules')}</a>
       </div>
+      <p class="h-hero-date">
+        <StitchMark size={14} data-stitch-mark />
+        <span>
+          {dateIsKnown
+            ? <>{formattedStartDate}. <a href="#data">{say('Vezi detaliile', 'See the details')}</a></>
+            : <>{say('Data exactă nu a fost anunțată încă.', 'The exact date has not been announced yet.')} <a href="#data">{say('Primește-o prin email', 'Get it by email')}</a></>}
+        </span>
+      </p>
+    </div>
+    <ScrollCue href="#data" label={say('Derulează la detalii', 'Scroll to the details')} />
+    <p class="h-credit h-credit-hero"><a href="https://commons.wikimedia.org/wiki/File:Cetatea_de_Scaun_a_Sucevei.jpg">{say('Foto: Cezar Suceveanu', 'Photo: Cezar Suceveanu')}</a>, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
+  </section>
+
+  <section class="wrap h-facts" id="data" aria-labelledby="facts-title">
+    <div class="h-facts-copy">
+      <h2 class="h-facts-lead" id="facts-title">{say('Două secțiuni, cinci clasamente, cinci zile la Suceava.', 'Two sections, five rankings, five days in Suceava.')}</h2>
+      <p class="h-facts-text">{say('La TIC concurezi doar la nivelul clasei tale, de la a IX-a la a XII-a, iar fiecare clasă are clasamentul ei. Secțiunea C# are un singur clasament pentru toate clasele.', 'In TIC you compete only at your own grade level, from 9 to 12, and each grade has its own ranking. The C# section has a single ranking for all grades.')}</p>
+    </div>
+    <div class="h-panel">
       {dateIsKnown ? (
-        <div class="date-band-actions">
-          <a class="button button-gold" href="/api/calendar.ics">{say('Adaugă în calendar', 'Add to calendar')}</a>
-          <a class="text-link" href={`/${lang}/program`}>{say('Vezi programul', 'View schedule')} <span aria-hidden="true">→</span></a>
+        <div class="h-panel-body">
+          <h2>{formattedStartDate}</h2>
+          <p>{say(`${eventConfig.durationDays} zile la ${eventConfig.host}.`, `${eventConfig.durationDays} days at ${eventConfig.host}.`)}</p>
+          <a class="button h-panel-button" href="/api/calendar.ics">{say('Adaugă în calendar', 'Add to calendar')}</a>
         </div>
       ) : (
-        <form class="notify-form" method="post" action="/api/notify">
-          <div class="notify-row">
-            <label class="sr-only" for="notify-email">Email</label>
-            <input id="notify-email" name="email" type="email" autocomplete="email" placeholder="nume@exemplu.ro" required />
-            <button class="button button-gold" type="submit">{say('Anunță-mă', 'Notify me')}</button>
+        <>
+          <form class="h-notify" method="post" action="/api/notify" novalidate data-notify
+            data-err-email={say('Adresa nu pare completă. Verifică să aibă „@” și un domeniu, de exemplu nume@exemplu.ro.', 'The address looks incomplete. Check that it has an “@” and a domain, for example name@example.com.')}
+            data-err-consent={say('Bifează acordul ca să-ți putem trimite mesajul.', 'Tick the consent box so we can send you the message.')}
+            data-err-fallback={say('Nu s-a putut trimite. Încearcă din nou mai târziu.', 'Could not send. Please try again later.')}>
+            <h2>{say('Data nu a fost anunțată încă', 'The date has not been announced yet')}</h2>
+            <p class="h-muted">{say('Lasă-ne adresa de email și îți trimitem un singur mesaj, când data devine oficială.', 'Leave your email address and we will send one message when the date becomes official.')}</p>
+            <label class="h-label" for="notify-email">{say('Adresa de email', 'Email address')}</label>
+            <input id="notify-email" class="h-input" name="email" type="email" autocomplete="email" aria-invalid="false" aria-describedby="notify-error" />
+            <label class="h-check">
+              <input type="checkbox" name="consent" value="yes" aria-describedby="notify-error" />
+              <span>{say('Sunt de acord să primesc acest anunț. Pot retrage acordul oricând.', 'I agree to receive this announcement. I can withdraw my consent at any time.')}</span>
+            </label>
+            {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey}></div>}
+            <div class="h-honeypot" inert><label>Website<input name="website" tabindex="-1" autocomplete="off" /></label></div>
+            <p class="h-error" id="notify-error" role="alert"></p>
+            <button class="h-submit" type="submit">{say('Trimite-mi data', 'Send me the date')}</button>
+          </form>
+          <div class="h-panel-body" role="status" data-form-success hidden>
+            <h2 tabindex="-1">{say('Gata, te-am notat', 'Done, you are on the list')}<svg class="h-tick" viewBox="0 0 6 6" aria-hidden="true" focusable="false">{[[0, 3], [1, 4], [2, 5], [3, 4], [4, 3], [5, 2]].map(([x, y]) => <rect x={x} y={y} width="1" height="1"></rect>)}</svg></h2>
+            <p class="h-muted">{say('Îți trimitem data într-un singur mesaj, imediat ce devine oficială.', 'We will send you the date in a single message as soon as it is official.')}</p>
+            <button class="h-text-button" type="button" data-notify-reset>{say('Schimbă adresa', 'Change address')}</button>
           </div>
-          {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>}
-          <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
-          <label class="checkline">
-            <input type="checkbox" name="consent" value="yes" required />
-            <span>{say('Sunt de acord ca emailul meu să fie folosit numai pentru anunțul datei ONTIC 2027. Pot retrage acordul oricând.', 'I agree that my email will only be used to announce the ONTIC 2027 date. I can withdraw consent at any time.')}</span>
-          </label>
-          <p class="status" aria-live="polite"></p>
-        </form>
+        </>
       )}
     </div>
   </section>
 
-  <section class="section" id="discover" aria-labelledby="intro-title"><div class="wrap">
-    <div class="intro-statement" data-reveal>
-      <span class="kicker">{say('Curios. Creativ. Pregătit.', 'Curious. Creative. Ready.')}</span>
-      <h2 id="intro-title">{say('Mai mult decât un concurs.', 'More than a competition.')} <span>{say('Locul în care pasiunea pentru tehnologie prinde formă.', 'Where a passion for technology takes shape.')}</span></h2>
-      <p>{say('Elevi din toată țara, profesori care îi inspiră și provocări care duc ideile mai departe. Ne întâlnim la Colegiul Național „Ștefan cel Mare” Suceava.', 'Students from across Romania, inspiring teachers and challenges that take ideas further. We meet at Colegiul Național „Ștefan cel Mare” in Suceava.')}</p>
+  <section class="wrap h-sections" id="sectiuni" aria-labelledby="sections-title">
+    <div class="h-head">
+      <h2 id="sections-title">{say('Secțiunile concursului', 'The contest sections')}</h2>
+      <a class="h-head-link" href={`/${lang}/concurs`}>{say('Toate regulamentele', 'All rules')}</a>
     </div>
-    <div class="fact-row" data-reveal>
-      <div><strong>{eventConfig.sections.length}</strong><span>{say('secțiuni de concurs', 'contest sections')}</span></div>
-      <div><strong>{ticRankingCount} + 1</strong><span>{say('clasamente: TIC pe clase, C# comun', 'rankings: TIC by grade, one for C#')}</span></div>
-      <div><strong>{eventConfig.durationDays}</strong><span>{say('zile la Suceava', 'days in Suceava')}</span></div>
-    </div>
-  </div></section>
-
-  <section class="section soft-section" aria-labelledby="tracks-title"><div class="wrap">
-    <div class="section-head" data-reveal>
-      <div><span class="kicker">{say('Concursul', 'The competition')}</span><h2 id="tracks-title">{say('Talente diferite.', 'Different talents.')}<br />{say('Aceeași ambiție.', 'The same ambition.')}</h2></div>
-      <p>{say('Alege secțiunea ta și găsește regulamentele, informațiile despre probe și rezultatele, pe măsură ce sunt publicate.', 'Find your section, its rules, contest information and results as they are published.')}</p>
-    </div>
-    <div class="track-grid">
-      <article class="track-card" data-reveal>
-        <div class="track-orbit" aria-hidden="true"></div>
-        <span class="kicker">{say('Tehnologia informației', 'Information technology')}</span>
-        <div class="track-symbol" aria-hidden="true">TIC.</div>
-        <h3>{say('Transformă ce știi în ce poți.', 'Turn knowledge into possibility.')}</h3>
-        <p>{say('Probe practice și clasamente distincte pentru fiecare clasă. Aici, atenția la detalii întâlnește creativitatea.', 'Practical challenges and separate rankings for each grade. Where attention to detail meets creativity.')}</p>
-        <div class="grade-links">{eventConfig.sections.filter((section) => section.kind === 'tic').map((section) => <a href={`/${lang}/concurs/${section.id}`}>{say('Clasa ', 'Grade ')}{section.grade}</a>)}</div>
-      </article>
-      <article class="track-card violet" data-reveal>
-        <div class="track-orbit" aria-hidden="true"></div>
-        <span class="kicker">{say('Programare', 'Programming')}</span>
-        <div class="track-symbol" aria-hidden="true">C#</div>
-        <h3>{say('Idei care devin aplicații.', 'Ideas that become applications.')}</h3>
-        <p>{say('O secțiune comună pentru clasele IX–XII. Gândire structurată, soluții clare și bucuria de a construi.', 'One shared section for grades IX–XII. Structured thinking, clear solutions and the joy of building.')}</p>
-        <a class="button" href={`/${lang}/concurs/csharp`}>{say('Explorează secțiunea C#', 'Explore the C# section')}</a>
-      </article>
-    </div>
-  </div></section>
-
-  <section class="section" aria-labelledby="journey-title"><div class="wrap">
-    <div class="section-head" data-reveal>
-      <div><span class="kicker">{say('Pentru participanți', 'For participants')}</span><h2 id="journey-title">{say('Mai puține căutări.', 'Less searching.')}<br />{say('Mai multă claritate.', 'More clarity.')}</h2></div>
-      <a class="text-link" href={`/${lang}/faq`}>{say('Întrebări frecvente', 'Frequently asked questions')} <span aria-hidden="true">→</span></a>
-    </div>
-    <div class="journey-grid">
-      <a class="journey-card" href={`/${lang}/program`} data-reveal><span class="journey-icon" aria-hidden="true">▦</span><h3>{say('Programul tău.', 'Your schedule.')}</h3><p>{say('De la prima întâlnire până la premiere. Urmărește structura și actualizările programului.', 'From the first meeting to the awards. Follow the schedule and its updates.')}</p><span class="text-link">{say('Vezi programul', 'View schedule')} <span aria-hidden="true">→</span></span></a>
-      <a class="journey-card" href={`/${lang}/participare`} data-reveal><span class="journey-icon" aria-hidden="true">✓</span><h3>{say('Totul pregătit.', 'Ready to take part.')}</h3><p>{say('Informații pentru elevi, profesori și delegații, adunate într-un singur loc.', 'Information for students, teachers and delegations, all in one place.')}</p><span class="text-link">{say('Ghid de participare', 'Participation guide')} <span aria-hidden="true">→</span></span></a>
-      <a class="journey-card" href={`/${lang}/locatii`} data-reveal><span class="journey-icon" aria-hidden="true">⌖</span><h3>{say('Ajungi mai ușor.', 'Find your way.')}</h3><p>{say('Locații, cazare și harta live TPL, ca să te orientezi ușor în Suceava.', 'Venues, accommodation and the live TPL map to help you navigate Suceava.')}</p><span class="text-link">{say('Locații și transport', 'Venues and transport')} <span aria-hidden="true">→</span></span></a>
-    </div>
-  </div></section>
-
-  <section class="section soft-section heritage-section" aria-labelledby="destination-title"><div class="wrap destination-feature">
-    <figure data-reveal>
-      <img src={voronetPhoto} width="1280" height="853" loading="lazy" decoding="async" alt={say('Mănăstirea Voroneț, cu picturile exterioare albastre', 'Voroneț Monastery with its blue exterior paintings')} />
-      <figcaption class="photo-credit"><a href="https://commons.wikimedia.org/wiki/File:Voronet_Monastery.JPG">Aupaelfary</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/ro/">CC BY-SA 3.0 RO</a></figcaption>
-    </figure>
-    <div data-reveal>
-      <span class="kicker">{say('Dincolo de concurs', 'Beyond the competition')}</span>
-      <h2 id="destination-title">{say('Închide laptopul.', 'Close your laptop.')}<br />{say('Deschide orizontul.', 'Open your horizons.')}</h2>
-      <p>{say('Cetatea de Scaun, mănăstirile pictate și ospitalitatea Bucovinei. Între două provocări, descoperă locul care ne aduce împreună.', 'The Seat Fortress, the painted monasteries and Bucovina’s hospitality. Between challenges, discover the place that brings us together.')}</p>
-      <a class="button" href={`/${lang}/bucovina`}>{say('Descoperă Bucovina', 'Discover Bucovina')}</a>
-      <div class="destination-links">
-        <a class="text-link" href="https://visitsuceava.ro/" target="_blank" rel="noreferrer">Visit Suceava <span aria-hidden="true">↗</span></a>
-        <a class="text-link" href="https://harta.tpl-sv.ro:8888/" target="_blank" rel="noreferrer">{say('Harta TPL live', 'Live TPL map')} <span aria-hidden="true">↗</span></a>
+    <div class="h-groups">
+      <div class="h-group h-group-tic">
+        <div class="h-group-head">
+          <h3>{say('Tehnologia Informației și Comunicațiilor', 'Information and Communication Technology')}</h3>
+          <span>{say('Un clasament pentru fiecare clasă', 'One ranking for each grade')}</span>
+        </div>
+        <ul class="h-cards" role="list">
+          {ticSections.map((s) => <li><SectionCard {...cardProps(s)} /></li>)}
+        </ul>
+      </div>
+      <div class="h-group h-group-cs">
+        <div class="h-group-head"><h3>{say('Programare în C#', 'C# programming')}</h3></div>
+        <SectionCard {...cardProps(csharp)} wide />
       </div>
     </div>
-  </div></section>
+  </section>
 
-  <section class="section" aria-labelledby="news-title"><div class="wrap">
-    <div class="section-head" data-reveal>
-      <div><span class="kicker">{say('La curent', 'Stay informed')}</span><h2 id="news-title">{say('Noutăți', 'Updates')}</h2></div>
-      <a class="text-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All updates')} <span aria-hidden="true">→</span></a>
+  <section class="h-program on-forest" id="program" aria-labelledby="program-title">
+    <div class="wrap">
+      <div class="h-head">
+        <h2 id="program-title">{say('Cele cinci zile', 'The five days')}</h2>
+        <a class="h-head-link" href={`/${lang}/program`}>{say('Programul detaliat', 'Detailed schedule')}</a>
+      </div>
+      <ol class="h-days" data-days>
+        {days.map((d) => (
+          <li class:list={['h-day', { 'is-contest': d.contest }]}>
+            <span class="h-day-mark" aria-hidden="true"><StitchMark size={21} color={d.contest ? 'var(--day-accent)' : 'var(--day-muted)'} data-day-mark /></span>
+            <span class="h-day-label">{say('Ziua', 'Day')} {d.day}</span>
+            <strong>{d.title}</strong>
+          </li>
+        ))}
+      </ol>
+      <div class="h-results" id="rezultate">
+        <p><strong>{say('Rezultatele', 'Results')}</strong> {say('provizorii apar aici după proba din ziua 3, iar cele finale după contestații, în ziua 4.', 'are posted here as provisional after the contest on day 3, and as final after appeals on day 4.')}</p>
+        <a href="#data">{dateIsKnown ? say('Adaugă data în calendar', 'Add the date to your calendar') : say('Află data concursului', 'Find out the contest date')}</a>
+      </div>
     </div>
-    <ul class="news-list" role="list">
+  </section>
+
+  <section class="wrap h-before" id="participare" aria-labelledby="before-title">
+    <h2 id="before-title">{say('Înainte să pleci de acasă', 'Before you leave home')}</h2>
+    <ul class="h-rows" role="list">
+      {guideRows.map((r) => (
+        <li><a href={`/${lang}/${r.href}`}><strong>{r.title}</strong><span>{r.text}</span></a></li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="h-bucovina on-forest" id="bucovina" aria-labelledby="bucovina-title">
+    <figure>
+      <img src={voronetPhoto} width="1280" height="853" loading="lazy" decoding="async" alt={say('Mănăstirea Voroneț, cu picturile exterioare albastre', 'Voroneț Monastery with its blue exterior paintings')} />
+      <figcaption class="h-credit">{say('Mănăstirea Voroneț. Foto: ', 'Voroneț Monastery. Photo: ')}<a href="https://commons.wikimedia.org/wiki/File:Voronet_Monastery.JPG">Aupaelfary</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0/ro/">CC BY-SA 3.0 RO</a></figcaption>
+    </figure>
+    <div class="h-bucovina-copy">
+      <h2 id="bucovina-title">{say('Între probe, Bucovina', 'Between contests, Bucovina')}</h2>
+      <p>{say('Cetatea de Scaun e chiar în oraș. Mănăstirile pictate, cu albastrul de Voroneț, sunt la aproximativ o oră de mers.', 'The Seat Fortress is right in the city. The painted monasteries, with the blue of Voroneț, are about an hour away.')}</p>
+      <div><a class="button button-gold" href={`/${lang}/bucovina`}>{say('Ce poți vizita în Bucovina', 'What to visit in Bucovina')}</a></div>
+    </div>
+  </section>
+
+  <section class="wrap h-news" aria-labelledby="news-title">
+    <div class="h-head">
+      <h2 id="news-title">{say('Noutăți', 'News')}</h2>
+      <a class="h-head-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All news')}</a>
+    </div>
+    <ul class="h-rows h-news-list" role="list">
       {news.slice(0, 3).map((item) => (
-        <li data-reveal>
-          <a href={`/${lang}/stiri/${item.slug}`}>
-            <span class="kicker">{ro ? item.category : item.enCategory || item.category}</span>
-            <strong>{ro ? item.title : item.enTitle || item.title}</strong>
-            <span class="news-arrow" aria-hidden="true">→</span>
+        <li>
+          <a class="h-news-item" href={`/${lang}/stiri/${item.slug}`}>
+            <span class="h-news-meta">
+              {!item.date.startsWith('[') && <span class="h-muted">{item.date}</span>}
+              <span class="h-news-cat">{ro ? item.category : item.enCategory || item.category}</span>
+            </span>
+            <span class="h-news-body">
+              <strong>{ro ? item.title : item.enTitle || item.title}</strong>
+              <span class="h-muted">{ro ? item.text : item.enText || item.text}</span>
+            </span>
           </a>
         </li>
       ))}
     </ul>
-  </div></section>
-
-  <section class="section section-tight" aria-labelledby="partners-title"><div class="wrap">
-    <span class="kicker" id="partners-title">{say('Împreună pentru educație', 'Together for education')}</span>
-    <div class="partners">
-      <div class="partner"><strong>{say('Organizator național', 'National organizer')}</strong><p>Ministerul Educației și Cercetării</p></div>
-      <div class="partner"><strong>{say('Organizator județean', 'County organizer')}</strong><p>Inspectoratul Școlar Județean Suceava</p></div>
-      <div class="partner"><strong>{say('Gazdă', 'Host')}</strong><p>{eventConfig.host}</p></div>
-    </div>
-  </div></section>
+  </section>
 </Base>
 
 <script>
-  // Sends the date-notification form without leaving the page and shows the server's reply.
-  const notifyForm = document.querySelector<HTMLFormElement>('.notify-form');
-  const FALLBACK_ERROR = document.documentElement.lang === 'ro'
-    ? 'Nu s-a putut trimite. Încearcă din nou mai târziu.'
-    : 'Could not send. Please try again later.';
-
-  notifyForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const status = notifyForm.querySelector('.status');
-    if (!status) return;
-    try {
-      const response = await fetch(notifyForm.action, { method: 'POST', body: new FormData(notifyForm) });
-      const result = await response.json();
-      status.textContent = result.message;
-      if (response.ok) notifyForm.reset();
-    } catch (error) {
-      console.error('Notify form failed', error);
-      status.textContent = FALLBACK_ERROR;
-    }
-  });
+  // Date-notification form: inline validation, fetch submit, swap to a success state.
+  const form = document.querySelector<HTMLFormElement>('[data-notify]');
+  if (form) {
+    const panel = form.parentElement as HTMLElement;
+    const success = panel.querySelector<HTMLElement>('[data-form-success]')!;
+    const email = form.elements.namedItem('email') as HTMLInputElement;
+    const consent = form.elements.namedItem('consent') as HTMLInputElement;
+    const error = form.querySelector<HTMLElement>('.h-error')!;
+    const submit = form.querySelector<HTMLButtonElement>('.h-submit')!;
+    const fail = (message: string, field?: HTMLInputElement) => {
+      error.textContent = message;
+      email.setAttribute('aria-invalid', field === email ? 'true' : 'false');
+      consent.setAttribute('aria-invalid', field === consent ? 'true' : 'false');
+      field?.focus();
+    };
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value.trim())) return fail(form.dataset.errEmail!, email);
+      if (!consent.checked) return fail(form.dataset.errConsent!, consent);
+      fail('');
+      submit.disabled = true;
+      try {
+        const response = await fetch(form.action, { method: 'POST', body: new FormData(form) });
+        const result = await response.json().catch(() => ({}));
+        if (response.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.querySelector<HTMLElement>('h2')?.focus();
+        } else {
+          fail(result.message || form.dataset.errFallback!);
+        }
+      } catch (err) {
+        console.error('Notify form failed', err);
+        fail(form.dataset.errFallback!);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+    panel.querySelector('[data-notify-reset]')?.addEventListener('click', () => {
+      success.hidden = true;
+      form.hidden = false;
+      form.reset();
+      email.focus();
+    });
+  }
 </script>

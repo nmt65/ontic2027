@@ -12,6 +12,6 @@ export const POST: APIRoute = async ({ request }) => {
   if(!key||!audience||!to||!from) return Response.json({message:'Formularul este în curs de configurare. Te rugăm să revii în curând.'},{status:503});
   const add=await fetch('https://api.resend.com/contacts',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({email, audience_id:audience, unsubscribed:false})});
   if(!add.ok && add.status!==409) return Response.json({message:'Nu am putut salva solicitarea. Încearcă din nou.'},{status:502});
-  await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({from,to:[to],subject:'Înscriere la notificarea datei ONTIC 2027',text:`Adresă: ${email}\nConsimțământ explicit pentru notificarea despre publicarea datei.\nȘtergere la cerere.`})});
+  await fetch('https://api.resend.com/emails',{method:'POST',headers:{Authorization:`Bearer ${key}`,'Content-Type':'application/json'},body:JSON.stringify({from,to:[to],subject:'Înscriere la notificarea datei ONTI 2027',text:`Adresă: ${email}\nConsimțământ explicit pentru notificarea despre publicarea datei.\nȘtergere la cerere.`})});
   return Response.json({message:'Mulțumim! Te anunțăm când data este publicată. Poți cere ștergerea adresei oricând.'});
 };

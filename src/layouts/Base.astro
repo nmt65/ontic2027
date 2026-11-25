@@ -1,10 +1,24 @@
 ---
+import '@fontsource/unbounded/latin-500.css';
+import '@fontsource/unbounded/latin-600.css';
+import '@fontsource/unbounded/latin-ext-500.css';
+import '@fontsource/unbounded/latin-ext-600.css';
+import '@fontsource/ibm-plex-sans/latin-400.css';
+import '@fontsource/ibm-plex-sans/latin-500.css';
+import '@fontsource/ibm-plex-sans/latin-600.css';
+import '@fontsource/ibm-plex-sans/latin-ext-400.css';
+import '@fontsource/ibm-plex-sans/latin-ext-500.css';
+import '@fontsource/ibm-plex-sans/latin-ext-600.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
 import '../styles/site.css';
+import '../styles/motion.css';
 import { eventConfig } from '../event.config';
 import { copy } from '../content/site';
-const { title = 'ONTIC 2027', description = 'Olimpiada Națională de Tehnologia Informației și Comunicațiilor · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en' };
+const { title = 'ONTI 2027', description = 'Olimpiada Națională de Tehnologia Informației · Suceava, România', lang = 'ro', transparentHeader = false } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en'; transparentHeader?: boolean };
 const t = copy[lang];
 const path = Astro.url.pathname.replace(/^\/(ro|en)/, '') || '/';
+const primaryLinks = ['/despre', '/participare', '/program', '/concurs', '/bucovina'];
 const altLang = lang === 'ro' ? 'en' : 'ro';
 const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toString();
 ---
@@ -13,8 +27,8 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#F3F4EF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0E1C16" media="(prefers-color-scheme: dark)" />
     <script is:inline>
       // Runs before the page is drawn, so there is no flash of the wrong theme.
       (function chooseInitialTheme() {
@@ -24,33 +38,58 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
         document.documentElement.dataset.theme = savedTheme || (prefersDark ? 'dark' : 'light');
       })();
     </script>
-    <title>{title} · ONTIC 2027</title>
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Hidden "before stitching" states only apply when motion is allowed and IntersectionObserver exists.
+      if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) { document.documentElement.classList.add('motion-ready'); setTimeout(function () { if (document.documentElement.dataset.motion !== 'on') document.documentElement.classList.remove('motion-ready'); }, 3000); }
+    </script>
+    <title>{title} · ONTI 2027</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="ro" href={new URL(`/ro${path === '/' ? '' : path}`, Astro.site)} />
     <link rel="alternate" hreflang="en" href={new URL(`/en${path === '/' ? '' : path}`, Astro.site)} />
     <link rel="alternate" hreflang="x-default" href={new URL(`/ro${path === '/' ? '' : path}`, Astro.site)} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta property="og:type" content="website" /><meta property="og:title" content={`${title} · ONTIC 2027`} /><meta property="og:description" content={description} /><meta property="og:locale" content={lang === 'ro' ? 'ro_RO' : 'en_GB'} /><meta property="og:image" content={new URL('/images/ontic-social.svg', Astro.site)} />
+    <meta property="og:type" content="website" /><meta property="og:title" content={`${title} · ONTI 2027`} /><meta property="og:description" content={description} /><meta property="og:locale" content={lang === 'ro' ? 'ro_RO' : 'en_GB'} /><meta property="og:image" content={new URL('/images/ontic-social.svg', Astro.site)} />
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'Event', name: eventConfig.name, description: eventConfig.fullName, eventStatus: 'https://schema.org/EventScheduled', eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode', ...(eventConfig.startDate ? { startDate: eventConfig.startDate, endDate: new Date(new Date(eventConfig.startDate).getTime() + (eventConfig.durationDays - 1) * 86400000).toISOString() } : {}), location: { '@type': 'Place', name: eventConfig.venue, address: { '@type': 'PostalAddress', addressLocality: eventConfig.city, addressCountry: 'RO' } }, organizer: [{ '@type': 'Organization', name: 'Ministerul Educației și Cercetării' }, { '@type': 'Organization', name: 'Inspectoratul Școlar Județean Suceava' }, { '@type': 'EducationalOrganization', name: eventConfig.host }] })} />
     {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <script async src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
   </head>
   <body>
     <a class="skip-link" href="#main">Sari la conținut / Skip to content</a>
-    <header class="site-header"><div class="header-inner">
-      <a class="brand" href={`/${lang}`} aria-label={`ONTIC 2027 — ${eventConfig.shortHost}`}><img src="/ontic-logo.svg" width="50" height="50" alt="" /><span class="brand-word"><strong>ONTIC<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b class="sr-only">Meniu / Menu</b></button>
-      <nav id="main-nav" aria-label={lang === 'ro' ? 'Navigare principală' : 'Main navigation'}><div class="nav-links">{t.nav.filter(([,href]) => ['/despre','/participare','/program','/concurs','/bucovina'].includes(href)).map(([label, href]) => <a href={`/${lang}${href}`} class:list={{ active: path === href || (href === '/concurs' && path.startsWith('/concurs')) }}>{label}</a>)}</div><details class="more-nav"><summary>{lang === 'ro' ? 'Explorează' : 'Explore'}</summary><div class="more-links">{t.nav.filter(([,href]) => !['/despre','/participare','/program','/concurs','/bucovina'].includes(href)).map(([label,href]) => <a href={`/${lang}${href}`}>{label}</a>)}</div></details>
-        <div class="nav-tools"><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'EN' : 'RO'}</a><button class="theme-toggle" aria-label={lang === 'ro' ? 'Schimbă tema luminoasă/întunecată' : 'Switch light/dark theme'} title={lang === 'ro' ? 'Schimbă tema' : 'Switch theme'}><span aria-hidden="true">◐</span></button></div>
+    <header class:list={['site-header', { 'is-transparent': transparentHeader }]}><div class="header-inner">
+      <a class="brand" href={`/${lang}`} aria-label={`ONTI 2027 — ${eventConfig.shortHost}`}><svg class="brand-mark" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><path d="M3 33V12h5v5h5v-5h5v5h5v-5h5v5h5v16z" fill="#D8A23A"></path><path d="M14 22l-3 3 3 3M22 22l3 3-3 3M19 21l-2 8" stroke="#12291F" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="brand-word"><strong>ONTI 2027</strong><small>Colegiul „Ștefan cel Mare”</small></span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">{lang === 'ro' ? 'Meniu' : 'Menu'}</button>
+      <nav id="main-nav" aria-label={lang === 'ro' ? 'Navigare principală' : 'Main navigation'}><div class="nav-links">{t.nav.filter(([,href]) => primaryLinks.includes(href)).map(([label, href]) => <a href={`/${lang}${href}`} class:list={{ active: path === href || (href === '/concurs' && path.startsWith('/concurs')) }}>{label}</a>)}</div><details class="more-nav"><summary>{lang === 'ro' ? 'Explorează' : 'Explore'}</summary><div class="more-links">{t.nav.filter(([,href]) => !primaryLinks.includes(href)).map(([label,href]) => <a href={`/${lang}${href}`}>{label}</a>)}</div></details>
+        <div class="nav-tools"><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'English' : 'Română'}</a><button class="theme-toggle" type="button" aria-label={lang === 'ro' ? 'Schimbă tema luminoasă/întunecată' : 'Switch light/dark theme'} title={lang === 'ro' ? 'Schimbă tema' : 'Switch theme'}><span aria-hidden="true">◐</span></button></div>
       </nav>
     </div><div class="scroll-progress" aria-hidden="true"></div></header>
     <main id="main"><slot /></main>
-    <footer class="site-footer"><div class="footer-main wrap">
-      <div class="footer-brand"><a class="brand" href={`/${lang}`}><img src="/ontic-logo.svg" width="50" height="50" alt="" /><span class="brand-word"><strong>ONTIC<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a><p>{t.footerTag}</p></div>
-      <div><h2>{lang === 'ro' ? 'Organizatori' : 'Organizers'}</h2><p>Ministerul Educației și Cercetării</p><p>Inspectoratul Școlar Județean Suceava</p><p><a href={`/${lang}/gazda`}>{eventConfig.host}</a></p></div>
-      <div><h2>{lang === 'ro' ? 'Contact' : 'Contact'}</h2><p>{eventConfig.email.startsWith('[DE COMPLETAT') ? (lang === 'ro' ? 'Datele de contact vor fi anunțate.' : 'Contact details will be announced.') : eventConfig.email}</p>{!eventConfig.phone.startsWith('[DE COMPLETAT') && <p>{eventConfig.phone}</p>}<a href={`/${lang}/contact`}>{lang === 'ro' ? 'Pagina de contact ↗' : 'Contact page ↗'}</a></div>
-      <div><h2>{lang === 'ro' ? 'Informații' : 'Information'}</h2><a href={`/${lang}/confidentialitate`}>{lang === 'ro' ? 'Confidențialitate' : 'Privacy'}</a><a href={`/${lang}/cookies`}>Cookies</a><a href={`/${lang}/termeni`}>{lang === 'ro' ? 'Termeni' : 'Terms'}</a><a href={`/${lang}/accesibilitate`}>{lang === 'ro' ? 'Accesibilitate' : 'Accessibility'}</a></div>
-    </div><div class="footer-bottom wrap"><span>© {eventConfig.year} ONTIC · Suceava, România</span><span>{lang === 'ro' ? 'Realizat cu grijă în Bucovina' : 'Made with care in Bucovina'}</span></div></footer>
+    <div class="footer-embroidery" aria-hidden="true" data-embroidery>
+      {[{ size: 'large', scale: 6, height: 84 }, { size: 'small', scale: 3, height: 42 }].map(band => (
+        <svg class={`embroidery-svg embroidery-${band.size}`} width="100%" height={band.height} data-embroidery-band={band.size}>
+          <defs>
+            <pattern id={`ie-footer-${band.size}`} width="14" height="14" patternUnits="userSpaceOnUse" patternTransform={`scale(${band.scale})`} data-embroidery-pattern>
+<g data-embroidery-motif="red"><path fill="#B3261E" stroke="var(--bg)" stroke-width="0.16" d="M7 1h1v1h-1zM6 2h1v1h-1zM8 2h1v1h-1zM5 3h1v1h-1zM9 3h1v1h-1zM4 4h1v1h-1zM10 4h1v1h-1zM3 5h1v1h-1zM11 5h1v1h-1zM2 6h1v1h-1zM12 6h1v1h-1zM1 7h1v1h-1zM13 7h1v1h-1zM2 8h1v1h-1zM12 8h1v1h-1zM3 9h1v1h-1zM11 9h1v1h-1zM4 10h1v1h-1zM10 10h1v1h-1zM5 11h1v1h-1zM9 11h1v1h-1zM6 12h1v1h-1zM8 12h1v1h-1zM7 13h1v1h-1z"></path></g>
+            <g data-embroidery-motif="forest"><path fill="#12291F" stroke="var(--bg)" stroke-width="0.16" d="M7 4h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM5 6h1v1h-1zM9 6h1v1h-1zM4 7h1v1h-1zM10 7h1v1h-1zM5 8h1v1h-1zM9 8h1v1h-1zM6 9h1v1h-1zM8 9h1v1h-1zM7 10h1v1h-1zM0 0h1v1h-1zM1 0h1v1h-1zM0 1h1v1h-1zM13 0h1v1h-1zM13 1h1v1h-1zM12 0h1v1h-1zM0 13h1v1h-1zM1 13h1v1h-1zM0 12h1v1h-1zM13 13h1v1h-1zM12 13h1v1h-1zM13 12h1v1h-1z"></path></g>
+            <g data-embroidery-motif="gold"><path fill="#D8A23A" stroke="var(--bg)" stroke-width="0.16" d="M7 7h1v1h-1z"></path></g>
+                      </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill={`url(#ie-footer-${band.size})`}></rect>
+        </svg>
+      ))}
+      <div class="footer-battlement"></div>
+    </div>
+    <footer class="site-footer on-forest">
+      <div class="footer-main wrap">
+        <div class="footer-brand"><strong>ONTI 2027</strong><p>{lang === 'ro' ? 'Olimpiada Națională de Tehnologia Informației, etapa națională.' : 'National Olympiad in Information Technology, national stage.'}</p></div>
+        <dl class="footer-orgs">
+          <div><dt>{lang === 'ro' ? 'Organizator național' : 'National organizer'}</dt><dd>Ministerul Educației și Cercetării</dd></div>
+          <div><dt>{lang === 'ro' ? 'Organizator județean' : 'County organizer'}</dt><dd>Inspectoratul Școlar Județean Suceava</dd></div>
+          <div><dt>{lang === 'ro' ? 'Gazdă' : 'Host'}</dt><dd><a href={`/${lang}/gazda`}>{eventConfig.host}</a></dd></div>
+        </dl>
+      </div>
+      <div class="footer-bottom wrap"><span>© {eventConfig.year} ONTI, Suceava</span><nav aria-label={lang === 'ro' ? 'Informații' : 'Information'}><a href={`/${lang}/contact`}>Contact</a><a href={`/${lang}/confidentialitate`}>{lang === 'ro' ? 'Confidențialitate' : 'Privacy'}</a><a href={`/${lang}/cookies`}>Cookies</a><a href={`/${lang}/termeni`}>{lang === 'ro' ? 'Termeni' : 'Terms'}</a><a href={`/${lang}/accesibilitate`}>{lang === 'ro' ? 'Accesibilitate' : 'Accessibility'}</a></nav></div>
+    </footer>
     <div class="cookie-banner" hidden role="dialog" aria-label="Preferințe cookie"><div><strong>Preferințe cookie</strong><p>Folosim doar cookie-uri funcționale. Analitica privacy-friendly este opțională.</p></div><button data-cookie="essential">Doar esențiale</button><button class="button button-small" data-cookie="all">Acceptă analitica</button></div>
     <script>
       // @ts-nocheck
@@ -65,6 +104,16 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       }
       menu?.addEventListener('click', () => setMenuOpen(menu.getAttribute('aria-expanded') !== 'true'));
       document.querySelectorAll('#main-nav a').forEach((link) => link.addEventListener('click', () => setMenuOpen(false)));
+      // Keeps Tab inside the header while the mobile menu is open.
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Tab' || menu?.getAttribute('aria-expanded') !== 'true' || !header) return;
+        const items = [...header.querySelectorAll('a[href], button, summary')].filter((el) => el.offsetParent !== null);
+        if (!items.length) return;
+        const first = items[0], last = items[items.length - 1];
+        if (!header.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+        else if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      });
       document.addEventListener('keydown', (event) => {
         if (event.key !== 'Escape' || menu?.getAttribute('aria-expanded') !== 'true') return;
         setMenuOpen(false);
@@ -87,8 +136,9 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       document.querySelectorAll('[data-cookie]').forEach(b => b.addEventListener('click', () => { localStorage.setItem('ontic-cookie-choice', b.dataset.cookie); banner.hidden = true; if (b.dataset.cookie === 'all') loadAnalytics(); }));
     </script>
     <script>import '../scripts/maps';</script>
-    <button class="back-top" type="button" hidden aria-label={lang === 'ro' ? 'Înapoi sus' : 'Back to top'}>⌃</button>
+    <button class="back-top" type="button" hidden aria-label={lang === 'ro' ? 'Înapoi sus' : 'Back to top'}><span aria-hidden="true">↑</span></button>
     <script>import '../scripts/experience';</script>
+    <script>import '../scripts/motion';</script>
   </body>
 </html>
 

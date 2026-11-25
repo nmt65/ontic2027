@@ -1,0 +1,11 @@
+---
+// A 7x7 box with a stitched X, built from pixels. Used in the hero date line and the programme days.
+interface Props { size?: number; color?: string; bg?: string; class?: string; [attr: string]: unknown }
+const { size = 14, color = 'var(--gold)', bg = 'var(--forest)', class: className, ...attrs } = Astro.props;
+// Needle order: the \ diagonal first, then the / diagonal (centre is already sewn). Each pixel is its own rect so it can be stitched in turn.
+const cross = [[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [5, 1], [4, 2], [2, 4], [1, 5]];
+---
+<svg class={className} width={size} height={size} viewBox="0 0 7 7" aria-hidden="true" focusable="false" style="display:block;flex:none" {...attrs}>
+  <rect width="7" height="7" fill={color} data-stitch-box></rect>
+  <g fill={bg} data-stitch-x>{cross.map(([x, y], i) => <rect x={x} y={y} width="1" height="1" style={`--i:${i}`}></rect>)}</g>
+</svg>
