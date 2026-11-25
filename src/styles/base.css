@@ -1,6 +1,6 @@
 /* Base, layout primitives, buttons, header, footer, cookie banner, back-to-top. */
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); -webkit-text-size-adjust: 100%; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
 body {
@@ -86,10 +86,14 @@ a:hover { text-decoration-thickness: 2px; color: var(--red-text); }
 
 /* Header */
 .site-header {
-  position: relative; z-index: 50;
+  position: sticky; top: 0; z-index: 800;
   background: var(--forest); color: var(--on-forest);
 }
-.site-header.is-transparent { position: absolute; inset: 0 0 auto 0; background: transparent; }
+/* Homepage: fixed over the hero (out of flow), transparent until the sentinel scrolls out of view. */
+.site-header.is-transparent { position: fixed; inset: 0 0 auto 0; background: transparent; transition: background-color 140ms linear; }
+.site-header.is-transparent.is-solid, html:not(.js) .site-header.is-transparent { background: var(--forest); }
+@media (prefers-reduced-motion: reduce) { .site-header.is-transparent { transition: none; } }
+.header-sentinel { position: absolute; top: 0; left: 0; width: 1px; height: 24px; pointer-events: none; visibility: hidden; }
 .site-header.menu-open { background: var(--forest); }
 .header-inner {
   max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter);
@@ -158,7 +162,6 @@ a:hover { text-decoration-thickness: 2px; color: var(--red-text); }
     padding: 16px var(--gutter) 32px; background: var(--forest);
   }
   .js .site-header.menu-open nav { display: flex; }
-  .site-header.is-transparent .scroll-progress { top: 0; bottom: auto; }
   .nav-links { flex-direction: column; flex: none; gap: 0; }
   .nav-links a, .more-nav summary { min-height: 52px; font-size: var(--text-lg); border-bottom: 1px solid var(--line-on-forest); width: 100%; }
   .more-nav summary { justify-content: space-between; }

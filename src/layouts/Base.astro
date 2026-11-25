@@ -56,6 +56,7 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
   </head>
   <body>
     <a class="skip-link" href="#main">Sari la conținut / Skip to content</a>
+    {transparentHeader && <div class="header-sentinel" aria-hidden="true"></div>}
     <header class:list={['site-header', { 'is-transparent': transparentHeader }]}><div class="header-inner">
       <a class="brand" href={`/${lang}`} aria-label={`ONTI 2027 — ${eventConfig.shortHost}`}><svg class="brand-mark" width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><path d="M3 33V12h5v5h5v-5h5v5h5v-5h5v5h5v16z" fill="#D8A23A"></path><path d="M14 22l-3 3 3 3M22 22l3 3-3 3M19 21l-2 8" stroke="#12291F" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="brand-word"><strong>ONTI 2027</strong><small>Colegiul „Ștefan cel Mare”</small></span></a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">{lang === 'ro' ? 'Meniu' : 'Menu'}</button>
@@ -95,6 +96,12 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       // @ts-nocheck
       const header = document.querySelector('.site-header');
       const menu = document.querySelector('.menu-toggle');
+
+      // Homepage: the header turns solid once the page has scrolled past the sentinel at the top.
+      const sentinel = document.querySelector('.header-sentinel');
+      if (sentinel && header && 'IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => header.classList.toggle('is-solid', !entry.isIntersecting)).observe(sentinel);
+      }
 
       // Opens or closes the mobile menu and stops the page behind it from scrolling.
       function setMenuOpen(isOpen) {
