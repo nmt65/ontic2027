@@ -8,3 +8,5 @@
 - Suceava panorama (`suceava-panorama.webp`): Rosenborg BK Fan, CC0 1.0. Source: https://commons.wikimedia.org/wiki/File:Panoramic_view_over_the_city_centre_of_Suceava,_Romania_(June,_2025).jpg . Resized and encoded as WebP.
 - Burdujeni station (`gara-burdujeni.webp`): Curcan Ionel, CC BY-SA 3.0 / GFDL. Source: https://commons.wikimedia.org/wiki/File:Gara_Burdujeni_3.jpg . Resized and encoded as WebP.
 - Seat Fortress aerial (`cetatea-aerial.webp`): SuceavaNews, CC BY-SA 4.0. Source: https://commons.wikimedia.org/wiki/File:Imagine_aerian%C4%83_a_Cet%C4%83%C8%9Bii_de_Scaun_a_Sucevei.jpg . Resized and encoded as WebP.
+- Festivalul Medieval (remote image on the home page): Suceava News. Source: https://www.svnews.ro/festivalul-medieval-din-cetatea-de-scaun-a-sucevei-s-a-deschis-oficial-cu-salve-de-foc-si-parada-trupelor-participante-sub-ochii-lui-stefan-cel-mare/398466/ . The image remains hosted by its source.
+- Bucovina Rock Castle (remote image on the home page): Cinema Suceava. Source: https://www.cinemasuceava.ro/stiri-evenimente/a/bucovina-rock-castle-2017-program-pe-ore/ . The image remains hosted by its source.

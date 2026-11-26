@@ -2,7 +2,7 @@ export const eventConfig = {
   name: 'ONTI 2027',
   fullName: 'Olimpiada Națională de Tehnologia Informației',
   host: 'Colegiul Național „Ștefan cel Mare” Suceava',
-  shortHost: 'CNSCM Suceava',
+  shortHost: 'Colegiul Național „Ștefan cel Mare” Suceava',
   city: 'Suceava',
   country: 'România',
   year: 2027,

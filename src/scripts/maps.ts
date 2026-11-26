@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const landmarks = [
-  { position: [47.646, 26.261] as L.LatLngExpression, label: 'CNSCM Suceava · gazda ONTI 2027' },
+  { position: [47.646, 26.261] as L.LatLngExpression, label: 'Colegiul Național „Ștefan cel Mare” Suceava · gazda ONTI 2027' },
   { position: [47.640699, 26.27243] as L.LatLngExpression, label: 'Cetatea de Scaun a Sucevei' },
 ];
 
