@@ -128,9 +128,10 @@ main { position: relative; z-index: 0; min-height: 70vh; padding-top: 6.3rem; ov
 .transport-map { display: grid; grid-template-columns: .6fr 1.4fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; margin-top: clamp(4.5rem, 8vw, 7rem); }
 .transport-map h2 { margin: 0; color: var(--dossier-ink); font-size: clamp(2rem, 3.5vw, 3.45rem); line-height: 1; letter-spacing: -.04em; }
 .transport-map p { max-width: 410px; margin: 1.1rem 0 0; color: var(--dossier-muted); line-height: 1.65; }
-.tpl-map-wrap { position: relative; overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 16px; background: #eef1ef; }
+.tpl-map-panel { display: grid; gap: .85rem; }
+.tpl-map-wrap { overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 16px; background: #eef1ef; }
 .tpl-map-frame { display: block; width: 100%; height: min(66vw, 650px); min-height: 470px; border: 0; }
-.tpl-map-open { position: absolute; right: 1rem; bottom: 1rem; padding: .72rem .9rem; color: #fff; background: var(--dossier-ink); border-radius: 12px; font-size: .79rem; font-weight: 800; text-decoration: none; box-shadow: 0 8px 18px rgb(16 39 64 / .18); }
+.tpl-map-open { justify-self: end; padding: .72rem .9rem; color: #fff; background: var(--dossier-ink); border-radius: 12px; font-size: .79rem; font-weight: 800; text-decoration: none; box-shadow: 0 8px 18px rgb(16 39 64 / .18); }
 .tpl-map-open:hover { background: var(--dossier-blue); }
 .landmark-page { min-height: 100svh; display: grid; align-items: center; padding: 6.4rem 0 4.2rem; }
 .landmark-page-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: clamp(2rem, 7vw, 7rem); align-items: center; }
