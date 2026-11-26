@@ -21,6 +21,7 @@ body { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; ove
 .more-links { min-width: 224px; padding: .4rem; border: 1px solid color-mix(in srgb, var(--dossier-ink) 12%, transparent); border-radius: 16px; background: color-mix(in srgb, var(--dossier-paper) 80%, transparent); box-shadow: 0 12px 28px rgb(16 39 64 / .12); backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35); }
 .more-links a { padding: .68rem .72rem; border-radius: 10px; }
 .more-links a:hover { color: var(--dossier-blue); background: #eef2f4; }
+@media (min-width: 1051px) { .more-nav[open] { z-index: 2; } .more-links { top: calc(100% + .6rem); width: 252px; padding: .45rem; border-color: color-mix(in srgb, var(--dossier-ink) 14%, transparent); border-radius: 14px; background: var(--dossier-paper); box-shadow: 0 18px 40px rgb(16 39 64 / .16); backdrop-filter: none; -webkit-backdrop-filter: none; } .more-links a { padding: .78rem .82rem; border-radius: 9px; } .more-nav[open] summary { color: var(--dossier-blue); background: color-mix(in srgb, var(--dossier-blue) 8%, transparent); } }
 main { position: relative; z-index: 0; min-height: 70vh; padding-top: 6.3rem; overflow: clip; }
 
 .dossier-hero { min-height: calc(100svh - 76px); display: grid; align-items: center; padding: clamp(2.5rem, 5.7vw, 5rem) 0; background: var(--dossier-paper); }
