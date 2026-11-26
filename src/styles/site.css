@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Manrope';
+  src: url('/fonts/manrope-variable.ttf') format('truetype');
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+}
+
 :root {
   scroll-behavior: smooth;
 }
@@ -127,7 +135,7 @@ img {
 
 .nav-links a:hover,
 .nav-links a.active {
-  color: #2e8a68;
+  color: var(--blue-strong);
 }
 
 .nav-tools {
@@ -466,7 +474,7 @@ tbody tr:last-child td {
 }
 
 .notice {
-  border-left: 4px solid var(--violet-tint);
+  border: 1px solid var(--line);
 }
 
 .notice strong {
@@ -561,6 +569,10 @@ tbody tr:last-child td {
   display: grid;
   grid-template-columns: 1.4fr .6fr;
   gap: 3rem;
+}
+
+.text-columns > * {
+  min-width: 0;
 }
 
 .prose h2 {
@@ -871,6 +883,9 @@ section[id] {
 .site-header {
   border-bottom: 1px solid var(--line);
 }
+.header-inner.wrap {
+  width: min(calc(100% - 44px), var(--max));
+}
 
 .header-inner {
   width: min(calc(100% - 64px),1440px);
@@ -1013,10 +1028,6 @@ section[id] {
 
 .card {
   box-shadow: none;
-}
-
-.notice {
-  border-left-width: 2px;
 }
 
 .site-footer {
@@ -1289,26 +1300,26 @@ section[id] {
   }
 }
 
-/* Luminous ONTIC design system. */
+/* Luminous ONTI design system. */
 
 :root {
   --ink: #171c29;
   --ink-soft: #566277;
   --paper: #fff;
   --surface: #f5f7fb;
-  --blue: #155ce4;
-  --blue-strong: #2454b2;
-  --blue-tint: #cde5ff;
+  --blue: #162d58;
+  --blue-strong: #244777;
+  --blue-tint: #dde7f2;
   --violet-tint: #d8d1ff;
-  /* Heritage colours, taken from the logo: forest green and stone gold. */
-  --forest: #10261f;
-  --forest-soft: #1d3a2f;
-  --gold: #e8c576;
-  --gold-ink: #87590c;
+  /* Navy and gold accents echo the CNSCM school crest. */
+  --forest: #101d38;
+  --forest-soft: #25395c;
+  --gold: #d6ad50;
+  --gold-ink: #876319;
   --line: #e0e6f0;
   --radius: 26px;
   --max: 1240px;
-  --font: Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font: 'Manrope',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   --shadow: 0 16px 50px #193c7510;
   scroll-padding-top: 100px;
   color-scheme: light;
@@ -1321,8 +1332,8 @@ html[data-theme=dark] {
   --surface: #1c273b;
   --blue: #2563eb;
   --blue-strong: #94bdff;
-  --forest: #0b1c16;
-  --forest-soft: #16302a;
+  --forest: #0b1426;
+  --forest-soft: #192d4c;
   --gold-ink: #e8c576;
   --line: #35425c;
   color-scheme: dark;
@@ -1376,8 +1387,9 @@ a:hover {
 }
 
 .brand img {
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 48px;
+  object-fit: contain;
 }
 
 .brand-word strong {
@@ -1407,8 +1419,8 @@ a:hover {
 .language,
 .theme-toggle {
   font-size: .875rem;
-  min-width: 40px;
-  height: 40px;
+  min-width: 44px;
+  height: 44px;
 }
 
 .theme-toggle {
@@ -1478,7 +1490,7 @@ a:hover {
   height: 2px;
   transform: scaleX(0);
   transform-origin: left;
-  background: #246bfa;
+  background: var(--gold);
   pointer-events: none;
 }
 
@@ -1544,74 +1556,9 @@ a:hover {
   background: var(--surface);
 }
 
-.launch-hero {
-  overflow: hidden;
-  text-align: center;
-  background: linear-gradient(180deg,color-mix(in srgb,var(--blue) 7%,var(--paper)),var(--paper));
-  padding: 56px 24px 0;
-  color: var(--ink);
+.intro-statement {
+  max-width: 980px;
 }
-
-/* Event name and place, shown above the headline. */
-
-.hero-event {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  margin: 0 auto;
-  padding: 6px 16px 6px 6px;
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  background: var(--paper);
-  font-size: 1rem;
-  color: var(--ink-soft);
-}
-
-.hero-event strong {
-  padding: 4px 12px;
-  border-radius: 999px;
-  background: var(--forest);
-  color: var(--gold);
-  letter-spacing: .02em;
-}
-
-.launch-hero .eyebrow {
-  color: #365581;
-  max-width: 620px;
-  margin: auto;
-}
-
-.launch-hero h1 {
-  font-size: clamp(3.5rem,8vw,8rem);
-  line-height: 1;
-  letter-spacing: -.075em;
-  font-weight: 700;
-  margin: 28px auto 24px;
-  max-width: 1100px;
-}
-
-.launch-hero h1 span {
-  color: var(--blue);
-}
-
-.hero-description {
-  font-size: clamp(1.05rem,1.7vw,1.3rem);
-  line-height: 1.65;
-  max-width: 620px;
-  margin: 0 auto;
-  color: var(--ink-soft);
-}
-
-.launch-actions {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px 28px;
-  flex-wrap: wrap;
-  margin: 30px 0 40px;
-}
-
-/* Secondary actions: a text link with an arrow, never a second button. */
 
 .text-link {
   display: inline-flex;
@@ -1628,78 +1575,6 @@ a:hover {
 
 .text-link:hover {
   text-decoration-thickness: 2px;
-}
-
-.launch-hero .button-outline {
-  color: #171c29;
-  border-color: #c6d2e4;
-}
-
-.hero-landscape {
-  max-width: 1440px;
-  position: relative;
-  margin: 0 auto;
-  border-radius: 32px 32px 0 0;
-  overflow: hidden;
-  height: clamp(270px,35vw,470px);
-  background: #d8e8f3;
-}
-
-.hero-landscape img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 62%;
-  display: block;
-}
-
-.hero-landscape:after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(transparent 35%,#0a1b38c4);
-}
-
-.landscape-label {
-  position: absolute;
-  z-index: 1;
-  left: 38px;
-  bottom: 30px;
-  color: white;
-  text-align: left;
-}
-
-.landscape-label strong {
-  display: block;
-  font-size: clamp(1.8rem,3vw,3rem);
-  letter-spacing: -.05em;
-}
-
-.landscape-label span {
-  font-size: 1rem;
-  text-shadow: 0 1px 8px #0008;
-}
-
-.photo-credit {
-  font-size: .75rem;
-  color: var(--ink-soft);
-  text-align: right;
-  margin: 12px 0 0;
-}
-
-.photo-credit a {
-  display: inline-block;
-  padding: 8px 0;
-}
-
-.hero-credit {
-  max-width: 1440px;
-  margin: 10px auto;
-  padding: 0 24px;
-}
-
-.intro-statement {
-  max-width: 980px;
 }
 
 .intro-statement h2 {
@@ -1734,113 +1609,6 @@ html[data-theme=dark] .fact-row strong {
 .fact-row span {
   color: var(--ink-soft);
   font-size: .9375rem;
-}
-
-/* Date band: the heritage moment on the homepage, dark forest with a gold action. */
-
-.date-band {
-  background: var(--forest);
-  color: #f4f1e6;
-  padding: 56px 0;
-  position: relative;
-}
-
-/* Crenellated top edge, echoing the fortress walls in the logo. */
-
-.date-band:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: -11px;
-  height: 12px;
-  background: var(--forest);
-  -webkit-mask: linear-gradient(90deg,#000 50%,transparent 50%) 0 0/28px 100%;
-  mask: linear-gradient(90deg,#000 50%,transparent 50%) 0 0/28px 100%;
-}
-
-.date-band-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: center;
-}
-
-.date-band .kicker {
-  color: var(--gold);
-}
-
-.date-band h2 {
-  font: 650 clamp(1.9rem,3.4vw,3rem)/1.1 var(--font);
-  letter-spacing: -.045em;
-  margin: 8px 0 12px;
-}
-
-.date-band p {
-  color: #c9d6cf;
-  margin: 0;
-}
-
-.date-band .text-link {
-  color: var(--gold);
-}
-
-.date-band-actions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 12px 28px;
-}
-
-.notify-form {
-  display: grid;
-  gap: 14px;
-}
-
-.notify-row {
-  display: flex;
-  gap: 10px;
-}
-
-.notify-row input {
-  flex: 1;
-  min-width: 0;
-  min-height: 52px;
-  padding: 0 18px;
-  border: 1px solid #ffffff4d;
-  border-radius: 999px;
-  background: #ffffff12;
-  color: #fff;
-}
-
-.notify-row input::placeholder {
-  color: #b9c9c0;
-}
-
-.date-band .checkline {
-  color: #c9d6cf;
-  font-size: .875rem;
-}
-
-.date-band .status {
-  color: var(--gold);
-  margin: 0;
-}
-
-.date-band .status:empty {
-  display: none;
-}
-
-.button-gold,
-.date-band .button-gold {
-  background: var(--gold);
-  color: var(--forest);
-}
-
-.button-gold:hover,
-.date-band .button-gold:hover {
-  background: #f3d68f;
-  color: var(--forest);
 }
 
 /* Heritage section: a thin gold rule above the Bucovina feature. */
@@ -2137,8 +1905,7 @@ html[data-theme=dark] .fact-row strong {
 
 .section-chip {
   border: 1px solid var(--line);
-  border-bottom: 3px solid var(--accent);
-  border-radius: 18px;
+  border-radius: 16px;
   font-size: 1rem;
 }
 
@@ -2159,8 +1926,8 @@ html[data-theme=dark] .fact-row strong {
 .notice {
   background: #eef4ff;
   color: #28446f;
-  border-color: #4f82e1;
-  border-radius: 0 16px 16px 0;
+  border-color: #dce6f5;
+  border-radius: 16px;
   padding: 23px;
   font-size: 1rem;
 }
@@ -2483,27 +2250,6 @@ td {
 /* Stop the page from scrolling behind the open mobile menu. */
 
 @media (max-width: 760px) {
-  .date-band {
-    padding: 44px 0 40px;
-  }
-  .date-band-inner {
-    grid-template-columns: 1fr;
-    gap: 24px;
-  }
-  .notify-row {
-    flex-direction: column;
-  }
-  .launch-hero h1 {
-    margin: 22px auto 18px;
-  }
-  .launch-actions {
-    flex-direction: column;
-    gap: 4px;
-    margin: 24px 0 28px;
-  }
-  .hero-event {
-    font-size: .875rem;
-  }
   .journey-card {
     min-height: 0;
   }
@@ -2519,27 +2265,6 @@ td {
 }
 
 @media (max-width: 620px) {
-  .launch-hero {
-    padding: 42px 16px 0;
-  }
-  .launch-hero h1 {
-    font-size: clamp(3.3rem,13vw,5rem);
-  }
-  .launch-hero .eyebrow {
-    font-size: .8125rem;
-  }
-  .hero-landscape {
-    border-radius: 22px 22px 0 0;
-    height: 280px;
-  }
-  .landscape-label {
-    left: 22px;
-    bottom: 22px;
-  }
-  .hero-credit {
-    padding: 0 16px;
-    text-align: left;
-  }
   .section {
     padding: 60px 0;
   }
@@ -2623,4 +2348,56 @@ html[data-theme=dark] .section-kicker {
 /* Leaflet's default attribution link colour is too light on its white label. */
 .leaflet-container .leaflet-control-attribution a {
   color: #00587a;
+}
+
+/* Small shared refinements for the school identity and real photographs. */
+.site-header {
+  border-bottom: 1px solid var(--line);
+}
+.nav-links a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.nav-links a.active,
+.more-links a[aria-current=page] {
+  color: var(--blue-strong);
+  font-weight: 650;
+}
+.more-nav.has-active summary {
+  color: var(--blue-strong);
+}
+.more-links a {
+  min-height: 44px;
+}
+.school-photo {
+  margin: 0 0 28px;
+}
+.school-photo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 18px;
+  display: block;
+}
+.school-photo figcaption {
+  margin-top: 12px;
+}
+.gallery-intro {
+  max-width: 680px;
+  margin: 0 0 32px;
+  color: var(--ink-soft);
+}
+.gallery-grid:has(.school-photo) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 620px) {
+  .gallery-grid:has(.school-photo) {
+    grid-template-columns: 1fr;
+  }
+  .fact-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
 }

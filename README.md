@@ -1,6 +1,6 @@
-# ONTIC 2027 · site oficial
+# ONTI 2027 · site oficial
 
-Site bilingv, mobile-first pentru etapa națională a Olimpiadei Naționale de Tehnologia Informației și Comunicațiilor, găzduită la Suceava. Stack: Astro 7, TypeScript, Tailwind CSS 4 și tokeni CSS proprii; randare SSR cu adaptor Node pentru formularele server-side.
+Site bilingv, mobile-first pentru etapa națională a Olimpiadei Naționale de Tehnologia Informației, găzduită la Suceava. Stack: Astro 7, TypeScript, Tailwind CSS 4 și tokeni CSS proprii; randare SSR cu adaptor Node pentru formularele server-side.
 
 ## Livrabile incluse
 
@@ -47,7 +47,7 @@ Aplicația rulează la `http://localhost:4321/ro`. `/` redirecționează către 
 
 Editează **doar** `startDate` în `src/event.config.ts`, de exemplu `2027-04-20T09:00:00+03:00`. Lasă `null` până la anunțul oficial.
 
-- `null`: eticheta de dată neanunțată, program cu Ziua 1–5, formular de notificare, Event schema fără `startDate`, calendar ICS indisponibil.
+- `null`: eticheta de dată neanunțată, program cu Ziua 1–5, Event schema fără `startDate`, calendar ICS indisponibil.
 - ISO completat: countdown pe program, date calendaristice pentru zile, `startDate`/`endDate` în schema Event și descărcare `.ics` cu cinci zile.
 - După stabilirea datei, verifică orele, durata de cinci zile și zilele programului cu organizatorii; actualizează activitățile orientative. Data singură nu confirmă încă orele.
 
@@ -55,11 +55,11 @@ Editează **doar** `startDate` în `src/event.config.ts`, de exemplu `2027-04-20
 
 Este necesar un runtime Node.js care suportă procesul standalone Astro (de exemplu un serviciu Node pe Render/Fly.io sau container propriu). Comenzile: `npm ci`, `npm run build`, apoi `npm run start`; portul este citit din `PORT`. Setează `SITE_URL` la domeniul real.
 
-Pentru formulare, creează cheile Resend, un Audience pentru înscrierile la notificarea datei și o adresă de destinație verificată; completează `RESEND_API_KEY`, `RESEND_AUDIENCE_ID`, `CONTACT_EMAIL` și `RESEND_FROM_EMAIL`. Formularul de notificare adaugă adresa numai după acord explicit; formularul de contact trimite mesajul către organizatori. Configurează `TURNSTILE_SECRET_KEY` și `PUBLIC_TURNSTILE_SITE_KEY` împreună pentru verificarea Turnstile; fără secret funcționează honeypot + limitarea cererilor.
+Pentru formularul de contact, completează `RESEND_API_KEY`, `CONTACT_EMAIL` și `RESEND_FROM_EMAIL` cu o adresă de expediere verificată. Formularul de notificare a datei și endpointul său au fost eliminate; calendarul oficial se urmărește pe pagina Program.
 
 Setează `ADMIN_TOKEN` la un secret aleator lung și `ONTIC_DATA_DIR` la un volum persistent, apoi deschide `/ro/admin`. Editorul protejat scrie știrile/programul în `editorial.json` și clasamentul în `results.json`; paginile publice citesc aceste fișiere la runtime. Protejează tokenul, folosește HTTPS, limitează accesul administrativ la echipa desemnată și salvează backup înainte de import. Fără volum persistent, actualizările pot dispărea la redeploy.
 
-Limitarea în memorie este per proces și se golește la restart; pentru mai multe instanțe folosește rate limiting la proxy/WAF sau Redis. Exportul organizatorilor din Audience se face din Resend și trebuie gestionat cu acces restricționat. Scoreboard-ul public face polling la un minut și primește rezultatele aprobate din `results.json`.
+Limitarea în memorie este per proces și se golește la restart; pentru mai multe instanțe folosește rate limiting la proxy/WAF sau Redis. Scoreboard-ul public face polling la un minut și primește rezultatele aprobate din `results.json`.
 
 ## Pagini și funcții
 
@@ -91,4 +91,4 @@ Toate datele marcate `[DE COMPLETAT]`: data/calendar, ore, echipe și comisii, r
 
 ## Repere de structură consultate
 
-Structura logistică (program, călătorie, cazare, FAQ) a fost comparată cu site-ul [IOI 2026](https://ioi2026.uz/), iar separarea de clasamente a fost verificată în [regulamentul MEC pentru Olimpiada Națională TIC 2026](https://www.edu.ro/sites/default/files/_fi%C8%99iere/Minister/2026/olimpiade_concursuri/regulamente_actualizate/Regulament_Olimpiada_Nationala_TIC_2026.pdf). Site-ul ONTIC 2027 folosește structură și texte proprii; regulile 2026 sunt doar un reper și nu sunt prezentate ca regulament 2027.
+Structura logistică (program, călătorie, cazare, FAQ) a fost comparată cu site-ul [IOI 2026](https://ioi2026.uz/), iar separarea de clasamente a fost verificată în [regulamentul MEC pentru Olimpiada Națională TIC 2026](https://www.edu.ro/sites/default/files/_fi%C8%99iere/Minister/2026/olimpiade_concursuri/regulamente_actualizate/Regulament_Olimpiada_Nationala_TIC_2026.pdf). Site-ul ONTI 2027 folosește structură și texte proprii; regulile 2026 sunt doar un reper și nu sunt prezentate ca regulament 2027.

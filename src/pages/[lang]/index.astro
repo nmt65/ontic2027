@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
-import { eventConfig, dateIsKnown } from '../../event.config';
+import HomeHero from '../../components/HomeHero.astro';
+import { eventConfig } from '../../event.config';
 import { getEditorial } from '../../lib/editorial';
 
 const lang = Astro.params.lang as 'ro' | 'en';
@@ -9,63 +10,13 @@ const say = (romanian: string, english: string) => (ro ? romanian : english);
 const { news } = await getEditorial();
 
 // Wikimedia Commons photographs. Credits are shown next to each image.
-const fortressPhoto = 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Cetatea_de_Scaun_a_Sucevei.jpg/1280px-Cetatea_de_Scaun_a_Sucevei.jpg';
 const voronetPhoto = 'https://commons.wikimedia.org/wiki/Special:Redirect/file/Voronet%20Monastery.JPG?width=1280';
 
 // TIC has one ranking per grade; C# has one shared ranking.
 const ticRankingCount = eventConfig.sections.filter((section) => section.kind === 'tic').length;
-const formattedStartDate = dateIsKnown
-  ? new Date(eventConfig.startDate!).toLocaleDateString(ro ? 'ro-RO' : 'en-GB', { dateStyle: 'long', timeZone: 'Europe/Bucharest' })
-  : null;
 ---
 <Base lang={lang} title={say('Acasă', 'Home')}>
-  <section class="launch-hero" aria-labelledby="launch-title">
-    <p class="hero-event"><strong>ONTIC 2027</strong><span>Suceava, România</span></p>
-    <h1 id="launch-title">{say('Viitorul începe', 'The future starts')}<br /><span>{say('cu ideile tale.', 'with your ideas.')}</span></h1>
-    <p class="hero-description">{say('Etapa națională a Olimpiadei de Tehnologia Informației și Comunicațiilor: cinci secțiuni, elevi din toată țara, o săptămână în Bucovina.', 'The national stage of Romania’s Information and Communication Technology Olympiad: five sections, students from across the country, one week in Bucovina.')}</p>
-    <div class="launch-actions">
-      <a class="button" href={`/${lang}/participare`}>{say('Ghid de participare', 'Participation guide')}</a>
-      <a class="text-link" href={`/${lang}/concurs`}>{say('Secțiuni și regulamente', 'Sections and rules')} <span aria-hidden="true">→</span></a>
-    </div>
-    <figure class="hero-landscape">
-      <img src={fortressPhoto} width="1280" height="960" fetchpriority="high" alt={say('Zidurile Cetății de Scaun a Sucevei', 'The walls of Suceava’s Seat Fortress')} />
-      <figcaption class="landscape-label"><span>{say('Un oraș cu istorie. O generație cu viitor.', 'A city with history. A generation with a future.')}</span><strong>Suceava. 2027.</strong></figcaption>
-    </figure>
-  </section>
-  <p class="photo-credit hero-credit"><a href="https://commons.wikimedia.org/wiki/File:Cetatea_de_Scaun_a_Sucevei.jpg">Cezar Suceveanu</a> · <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> · {say('fotografie decupată', 'cropped photograph')}</p>
-
-  <section class="date-band" id="date-updates" aria-labelledby="date-title">
-    <div class="wrap date-band-inner">
-      <div>
-        <span class="kicker">{say('Etapa națională', 'National stage')}</span>
-        <h2 id="date-title">{dateIsKnown ? formattedStartDate : say('Data nu e încă în calendar.', 'The date is not on the calendar yet.')}</h2>
-        <p>{dateIsKnown
-          ? say(`${eventConfig.durationDays} zile la ${eventConfig.host}.`, `${eventConfig.durationDays} days at ${eventConfig.host}.`)
-          : say('Lasă-ne emailul și îți trimitem un singur mesaj când data devine oficială.', 'Leave your email and we will send one message when the date is official.')}</p>
-      </div>
-      {dateIsKnown ? (
-        <div class="date-band-actions">
-          <a class="button button-gold" href="/api/calendar.ics">{say('Adaugă în calendar', 'Add to calendar')}</a>
-          <a class="text-link" href={`/${lang}/program`}>{say('Vezi programul', 'View schedule')} <span aria-hidden="true">→</span></a>
-        </div>
-      ) : (
-        <form class="notify-form" method="post" action="/api/notify">
-          <div class="notify-row">
-            <label class="sr-only" for="notify-email">Email</label>
-            <input id="notify-email" name="email" type="email" autocomplete="email" placeholder="nume@exemplu.ro" required />
-            <button class="button button-gold" type="submit">{say('Anunță-mă', 'Notify me')}</button>
-          </div>
-          {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <div class="cf-turnstile" data-sitekey={import.meta.env.PUBLIC_TURNSTILE_SITE_KEY}></div>}
-          <label class="honeypot" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
-          <label class="checkline">
-            <input type="checkbox" name="consent" value="yes" required />
-            <span>{say('Sunt de acord ca emailul meu să fie folosit numai pentru anunțul datei ONTIC 2027. Pot retrage acordul oricând.', 'I agree that my email will only be used to announce the ONTIC 2027 date. I can withdraw consent at any time.')}</span>
-          </label>
-          <p class="status" aria-live="polite"></p>
-        </form>
-      )}
-    </div>
-  </section>
+  <HomeHero lang={lang} />
 
   <section class="section" id="discover" aria-labelledby="intro-title"><div class="wrap">
     <div class="intro-statement" data-reveal>
@@ -161,26 +112,3 @@ const formattedStartDate = dateIsKnown
     </div>
   </div></section>
 </Base>
-
-<script>
-  // Sends the date-notification form without leaving the page and shows the server's reply.
-  const notifyForm = document.querySelector<HTMLFormElement>('.notify-form');
-  const FALLBACK_ERROR = document.documentElement.lang === 'ro'
-    ? 'Nu s-a putut trimite. Încearcă din nou mai târziu.'
-    : 'Could not send. Please try again later.';
-
-  notifyForm?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const status = notifyForm.querySelector('.status');
-    if (!status) return;
-    try {
-      const response = await fetch(notifyForm.action, { method: 'POST', body: new FormData(notifyForm) });
-      const result = await response.json();
-      status.textContent = result.message;
-      if (response.ok) notifyForm.reset();
-    } catch (error) {
-      console.error('Notify form failed', error);
-      status.textContent = FALLBACK_ERROR;
-    }
-  });
-</script>

@@ -1,15 +1,15 @@
 {
   "locale": "en",
   "hero": {
-    "eyebrow": "National Olympiad in Information and Communication Technology",
+    "eyebrow": "National Olympiad in Information Technology",
     "title": "Ideas in code. Roots in Bucovina.",
     "summary": "Five sections, one community of young people shaping the digital world. We meet in Suceava, Romania, in 2027.",
     "datePending": "Date to be announced"
   },
-  "about": "ONTIC brings together students passionate about technology, teachers, and communities from across Romania. The 2027 national stage will take place in Suceava, hosted by Colegiul Național „Ștefan cel Mare”.",
+  "about": "ONTI brings together students passionate about technology, teachers, and communities from across Romania. The 2027 national stage will take place in Suceava, hosted by Colegiul Național „Ștefan cel Mare”.",
   "sections": ["TIC · grade IX", "TIC · grade X", "TIC · grade XI", "TIC · grade XII", "C# · grades IX–XII"],
-  "dateUnknownNotice": "The date has not been announced yet. Sign up for an email update and we will let you know when it is published.",
-  "contestDistinction": "ONTIC is Romania’s National Olympiad in Information and Communication Technology. It is distinct from the National Olympiad in Informatics (ONI), which has a different subject, format and ranking.",
+  "dateUnknownNotice": "The date has not been announced yet. The official dates will be published on the Schedule page.",
+  "contestDistinction": "ONTI is Romania’s National Olympiad in Information Technology. It is distinct from the National Olympiad in Informatics (ONI), which has a different subject, format and ranking.",
   "scheduleDays": ["Arrival and welcome", "Opening and orientation", "Contest day", "Evaluation and appeals", "Awards and departure"],
   "placeholders": "Items marked [TO BE COMPLETED] must be supplied and approved by the organizers before publication."
 }

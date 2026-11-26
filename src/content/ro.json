@@ -1,15 +1,15 @@
 {
   "locale": "ro",
   "hero": {
-    "eyebrow": "Olimpiada Națională de Tehnologia Informației și Comunicațiilor",
+    "eyebrow": "Olimpiada Națională de Tehnologia Informației",
     "title": "Idei în cod. Rădăcini în Bucovina.",
     "summary": "Cinci secțiuni, o comunitate de tineri care construiesc lumea digitală. Ne întâlnim la Suceava, în 2027.",
     "datePending": "Data urmează să fie anunțată"
   },
-  "about": "ONTIC aduce împreună elevi pasionați de tehnologie, profesori și comunități din toată țara. Etapa națională 2027 va avea loc la Suceava, cu Colegiul Național „Ștefan cel Mare” gazdă.",
+  "about": "ONTI aduce împreună elevi pasionați de tehnologie, profesori și comunități din toată țara. Etapa națională 2027 va avea loc la Suceava, cu Colegiul Național „Ștefan cel Mare” gazdă.",
   "sections": ["TIC clasa a IX-a", "TIC clasa a X-a", "TIC clasa a XI-a", "TIC clasa a XII-a", "C# clasele IX–XII"],
-  "dateUnknownNotice": "Data nu a fost anunțată încă. Înscrie-te la notificarea prin email și te anunțăm când este publicată.",
-  "contestDistinction": "ONTIC este Olimpiada Națională de Tehnologia Informației și Comunicațiilor. Nu este Olimpiada Națională de Informatică (ONI), care are altă disciplină, alt format și alte clasamente.",
+  "dateUnknownNotice": "Data nu a fost anunțată încă. Calendarul oficial va fi publicat în pagina Program.",
+  "contestDistinction": "ONTI este Olimpiada Națională de Tehnologia Informației. Nu este Olimpiada Națională de Informatică (ONI), care are altă disciplină, alt format și alte clasamente.",
   "scheduleDays": ["Sosire și primire", "Deschidere și acomodare", "Proba de concurs", "Evaluare și contestații", "Premiere și plecare"],
   "placeholders": "Informațiile marcate [DE COMPLETAT] trebuie furnizate și aprobate de organizatori înainte de publicare."
 }
