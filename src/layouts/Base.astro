@@ -1,13 +1,11 @@
 ---
 import '../styles/site.css';
+import '../styles/refresh.css';
 import { eventConfig } from '../event.config';
 import { copy } from '../content/site';
 const { title = 'ONTI 2027', description = 'Olimpiada Națională de Tehnologia Informației · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en' };
 const t = copy[lang];
 const path = Astro.url.pathname.replace(/^\/(ro|en)/, '') || '/';
-const primaryPaths = ['/despre', '/concurs', '/program', '/participare'];
-const primaryNav = primaryPaths.map(href => t.nav.find(item => item[1] === href)!);
-const secondaryNav = t.nav.filter(([, href]) => !primaryPaths.includes(href));
 const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
 const altLang = lang === 'ro' ? 'en' : 'ro';
 const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toString();
@@ -43,27 +41,37 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
   <body>
     <a class="skip-link" href="#main">Sari la conținut / Skip to content</a>
     <header class="site-header"><div class="header-inner wrap">
-      <a class="brand" href={`/${lang}`} aria-label={`ONTI 2027 — ${eventConfig.shortHost}`}><img src="/cnscm-logo.png" width="34" height="48" alt="" /><span class="brand-word"><strong>ONTI<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a>
+      <a class="brand" href={`/${lang}`} aria-label={`ONTI 2027 — ${eventConfig.shortHost}`}><img src="/cnscm-logo.png" width="34" height="48" alt="" /><span class="brand-word"><strong>ONTI<span>27</span></strong><small>Suceava · 2027</small></span></a>
       <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b class="sr-only">Meniu / Menu</b></button>
       <nav id="main-nav" aria-label={lang === 'ro' ? 'Navigare principală' : 'Main navigation'}>
-        <div class="nav-links">{primaryNav.map(([label, href]) => <a href={`/${lang}${href}`} class:list={{ active: isActive(href) }} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>)}</div>
-        <details class="more-nav" class:list={{ 'has-active': secondaryNav.some(([, href]) => isActive(href)) || path === '/gazda' }}>
-          <summary>{lang === 'ro' ? 'Descoperă' : 'Discover'}</summary>
+        <div class="nav-links">
+          <a href={`/${lang}/concurs`} class:list={{ active: isActive('/concurs') }}>{lang === 'ro' ? 'Concurs' : 'Contest'}</a>
+          <a href={`/${lang}/program`} class:list={{ active: isActive('/program') }}>{lang === 'ro' ? 'Program' : 'Schedule'}</a>
+          <a href={`/${lang}/participare`} class:list={{ active: isActive('/participare') }}>{lang === 'ro' ? 'Participare' : 'Participation'}</a>
+        </div>
+        <details class="more-nav" class:list={{ 'has-active': ['/locatii','/bucovina','/calatorie'].some(isActive) }}>
+          <summary>{lang === 'ro' ? 'Suceava' : 'Suceava'}</summary>
           <div class="more-links">
-            <a href={`/${lang}/gazda`} aria-current={path === '/gazda' ? 'page' : undefined}>{lang === 'ro' ? 'CNSCM · Gazda noastră' : 'CNSCM · Our host'}</a>
-            {secondaryNav.map(([label, href]) => <a href={`/${lang}${href}`} aria-current={isActive(href) ? 'page' : undefined}>{label}</a>)}
+            <a href={`/${lang}/locatii`}>{lang === 'ro' ? 'Hartă și locații' : 'Map and venues'}</a>
+            <a href={`/${lang}/calatorie`}>{lang === 'ro' ? 'Călătorie' : 'Travel'}</a>
+            <a href={`/${lang}/bucovina`}>{lang === 'ro' ? 'Bucovina' : 'Bucovina'}</a>
+            <a href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">CNSCM ↗</a>
           </div>
         </details>
-        <div class="nav-tools"><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'EN' : 'RO'}</a><button class="theme-toggle" aria-label={lang === 'ro' ? 'Schimbă tema luminoasă/întunecată' : 'Switch light/dark theme'} title={lang === 'ro' ? 'Schimbă tema' : 'Switch theme'}><span aria-hidden="true">◐</span></button></div>
+        <details class="more-nav info-nav" class:list={{ 'has-active': ['/stiri','/faq','/contact'].some(isActive) }}>
+          <summary>{lang === 'ro' ? 'Informații' : 'Information'}</summary>
+          <div class="more-links"><a href={`/${lang}/stiri`}>{lang === 'ro' ? 'Noutăți' : 'News'}</a><a href={`/${lang}/faq`}>FAQ</a><a href={`/${lang}/contact`}>{lang === 'ro' ? 'Contact' : 'Contact'}</a></div>
+        </details>
+        <div class="nav-tools"><a class="cnscm-link" href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">CNSCM <span aria-hidden="true">↗</span></a><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'EN' : 'RO'}</a><button class="theme-toggle" aria-label={lang === 'ro' ? 'Schimbă tema luminoasă/întunecată' : 'Switch light/dark theme'} title={lang === 'ro' ? 'Schimbă tema' : 'Switch theme'}><span aria-hidden="true">◐</span></button></div>
       </nav>
     </div><div class="scroll-progress" aria-hidden="true"></div></header>
     <main id="main"><slot /></main>
     <footer class="site-footer"><div class="footer-main wrap">
-      <div class="footer-brand"><a class="brand" href={`/${lang}`}><img src="/cnscm-logo.png" width="34" height="48" alt="" /><span class="brand-word"><strong>ONTI<span>27</span></strong><small>{eventConfig.shortHost}</small></span></a><p>{t.footerTag}</p></div>
-      <div><h2>{lang === 'ro' ? 'Organizatori' : 'Organizers'}</h2><p>Ministerul Educației și Cercetării</p><p>Inspectoratul Școlar Județean Suceava</p><p><a href={`/${lang}/gazda`}>{eventConfig.host}</a></p></div>
+      <div class="footer-brand"><a class="brand" href={`/${lang}`}><img src="/cnscm-logo.png" width="34" height="48" alt="" /><span class="brand-word"><strong>ONTI<span>27</span></strong><small>Suceava · 2027</small></span></a><p>{t.footerTag}</p></div>
+      <div><h2>{lang === 'ro' ? 'Organizatori' : 'Organizers'}</h2><p>Ministerul Educației și Cercetării</p><p>Inspectoratul Școlar Județean Suceava</p><p><a href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">{eventConfig.host} ↗</a></p></div>
       <div><h2>{lang === 'ro' ? 'Contact' : 'Contact'}</h2><p>{eventConfig.email.startsWith('[DE COMPLETAT') ? (lang === 'ro' ? 'Datele de contact vor fi anunțate.' : 'Contact details will be announced.') : eventConfig.email}</p>{!eventConfig.phone.startsWith('[DE COMPLETAT') && <p>{eventConfig.phone}</p>}<a href={`/${lang}/contact`}>{lang === 'ro' ? 'Pagina de contact ↗' : 'Contact page ↗'}</a></div>
       <div><h2>{lang === 'ro' ? 'Informații' : 'Information'}</h2><a href={`/${lang}/confidentialitate`}>{lang === 'ro' ? 'Confidențialitate' : 'Privacy'}</a><a href={`/${lang}/cookies`}>Cookies</a><a href={`/${lang}/termeni`}>{lang === 'ro' ? 'Termeni' : 'Terms'}</a><a href={`/${lang}/accesibilitate`}>{lang === 'ro' ? 'Accesibilitate' : 'Accessibility'}</a></div>
-    </div><div class="footer-bottom wrap"><span>© {eventConfig.year} ONTI · Suceava, România</span><span>{lang === 'ro' ? 'Realizat cu grijă în Bucovina' : 'Made with care in Bucovina'}</span></div></footer>
+    </div><div class="footer-bottom wrap"><span>© {eventConfig.year} ONTI · Suceava, România</span><span>{lang === 'ro' ? 'Fotografii: Wikimedia Commons' : 'Photography: Wikimedia Commons'}</span></div></footer>
     <div class="cookie-banner" hidden role="dialog" aria-label="Preferințe cookie"><div><strong>Preferințe cookie</strong><p>Folosim doar cookie-uri funcționale. Analitica privacy-friendly este opțională.</p></div><button data-cookie="essential">Doar esențiale</button><button class="button button-small" data-cookie="all">Acceptă analitica</button></div>
     <script>
       // @ts-nocheck
@@ -74,7 +82,7 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
       function setMenuOpen(isOpen) {
         menu?.setAttribute('aria-expanded', String(isOpen));
         header?.classList.toggle('menu-open', isOpen);
-        if (!isOpen) document.querySelector<HTMLDetailsElement>('.more-nav')?.removeAttribute('open');
+        if (!isOpen) document.querySelectorAll<HTMLDetailsElement>('.more-nav').forEach((item) => item.removeAttribute('open'));
         document.body.classList.toggle('menu-locked', isOpen);
       }
       window.matchMedia('(min-width: 1051px)').addEventListener('change', () => setMenuOpen(false));
