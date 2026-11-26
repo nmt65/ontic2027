@@ -2,11 +2,11 @@
 
 html { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; scroll-behavior: smooth; scroll-padding-top: 7.5rem; }
 body { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; }
-.site-header { position: fixed; top: 0; left: 0; z-index: 100; isolation: isolate; width: 100%; margin: 0; background: color-mix(in srgb, var(--dossier-paper) 36%, transparent); border: 0; border-bottom: 1px solid transparent; backdrop-filter: blur(10px) saturate(1.2); -webkit-backdrop-filter: blur(10px) saturate(1.2); transition: background .24s ease, border-color .24s ease, backdrop-filter .24s ease; }
+.site-header { position: fixed; top: 0; left: 0; z-index: 100; isolation: isolate; width: 100%; margin: 0; background: linear-gradient(110deg, color-mix(in srgb, var(--dossier-paper) 28%, transparent), color-mix(in srgb, var(--dossier-paper) 18%, transparent)); border: 0; border-bottom: 1px solid color-mix(in srgb, #fff 42%, transparent); box-shadow: inset 0 1px 0 rgb(255 255 255 / .28); backdrop-filter: blur(18px) saturate(1.38); -webkit-backdrop-filter: blur(18px) saturate(1.38); transition: background .24s ease, border-color .24s ease, box-shadow .24s ease, backdrop-filter .24s ease; }
 .header-inner { min-height: 76px; gap: 1.5rem; padding: 0; background: transparent; border: 0; box-shadow: none; }
 .site-header .brand, .site-header #main-nav { background: transparent; border: 0; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
 .site-header #main-nav { gap: .45rem; padding: 0; }
-.site-header.is-scrolled { background: color-mix(in srgb, var(--dossier-paper) 72%, transparent); border-bottom-color: color-mix(in srgb, var(--dossier-ink) 11%, transparent); backdrop-filter: blur(26px) saturate(1.45); -webkit-backdrop-filter: blur(26px) saturate(1.45); }
+.site-header.is-scrolled { background: linear-gradient(110deg, color-mix(in srgb, var(--dossier-paper) 64%, transparent), color-mix(in srgb, var(--dossier-paper) 52%, transparent)); border-bottom-color: color-mix(in srgb, var(--dossier-ink) 10%, transparent); box-shadow: inset 0 1px 0 rgb(255 255 255 / .52), 0 10px 30px rgb(16 39 64 / .05); backdrop-filter: blur(30px) saturate(1.55); -webkit-backdrop-filter: blur(30px) saturate(1.55); }
 .brand-word strong { color: var(--dossier-ink); letter-spacing: -.05em; }
 .brand-word small { color: var(--dossier-muted); letter-spacing: .08em; text-transform: uppercase; }
 #main-nav { gap: .2rem; }
