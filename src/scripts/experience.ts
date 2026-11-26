@@ -1,11 +1,13 @@
 const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 const progress = document.querySelector<HTMLElement>('.scroll-progress');
 const topButton = document.querySelector<HTMLButtonElement>('.back-top');
+const header = document.querySelector<HTMLElement>('.site-header');
 let scheduled = false;
 function updateScroll() {
   const distance = document.documentElement.scrollHeight - window.innerHeight;
   if (progress) progress.style.transform = `scaleX(${distance > 0 ? Math.min(1, window.scrollY / distance) : 0})`;
   if (topButton) topButton.hidden = window.scrollY < 650;
+  header?.classList.toggle('is-scrolled', window.scrollY > 18);
   scheduled = false;
 }
 window.addEventListener('scroll', () => { if (!scheduled) { scheduled = true; requestAnimationFrame(updateScroll); } }, { passive: true });
