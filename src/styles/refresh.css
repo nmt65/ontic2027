@@ -3,8 +3,11 @@
 html { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; scroll-behavior: smooth; scroll-padding-top: 7.5rem; }
 body { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; }
 .site-header { position: fixed; top: .8rem; left: 50%; z-index: 100; isolation: isolate; width: min(calc(100% - 2.4rem), var(--max)); margin: 0; background: transparent; border: 0; transform: translateX(-50%); }
-.header-inner { min-height: 68px; gap: 1.5rem; padding-inline: .8rem; background: color-mix(in srgb, var(--dossier-paper) 48%, transparent); border: 1px solid rgb(255 255 255 / .76); border-radius: 18px; box-shadow: 0 14px 32px rgb(16 39 64 / .1); backdrop-filter: blur(28px) saturate(1.6); -webkit-backdrop-filter: blur(28px) saturate(1.6); transition: background .2s ease, border-color .2s ease, box-shadow .2s ease; }
-.site-header.is-scrolled .header-inner { background: color-mix(in srgb, var(--dossier-paper) 66%, transparent); border-color: rgb(255 255 255 / .92); box-shadow: 0 16px 38px rgb(16 39 64 / .14); }
+.header-inner { min-height: 68px; gap: 1rem; padding: 0; background: transparent; border: 0; box-shadow: none; }
+.site-header .brand, .site-header #main-nav { border: 1px solid rgb(255 255 255 / .56); background: color-mix(in srgb, var(--dossier-paper) 24%, transparent); box-shadow: 0 10px 28px rgb(16 39 64 / .06); backdrop-filter: blur(22px) saturate(1.45); -webkit-backdrop-filter: blur(22px) saturate(1.45); transition: background .24s ease, border-color .24s ease, box-shadow .24s ease, transform .24s ease; }
+.site-header .brand { padding: .34rem .9rem .34rem .44rem; border-radius: 999px; }
+.site-header #main-nav { gap: .45rem; padding: .18rem .55rem; border-radius: 999px; }
+.site-header.is-scrolled .brand, .site-header.is-scrolled #main-nav { border-color: rgb(255 255 255 / .82); background: color-mix(in srgb, var(--dossier-paper) 62%, transparent); box-shadow: 0 14px 34px rgb(16 39 64 / .12); }
 .brand-word strong { color: var(--dossier-ink); letter-spacing: -.05em; }
 .brand-word small { color: var(--dossier-muted); letter-spacing: .08em; text-transform: uppercase; }
 #main-nav { gap: .2rem; }
@@ -110,10 +113,12 @@ main { position: relative; z-index: 0; min-height: 70vh; padding-top: 6.3rem; ov
 .locations-heading h2 { max-width: 590px; margin: .7rem 0 0; color: var(--dossier-ink); font-size: clamp(2.2rem, 4.2vw, 4.2rem); line-height: .98; letter-spacing: -.055em; }
 .locations-heading p { max-width: 540px; margin: 0; color: var(--dossier-muted); line-height: 1.7; }
 .landmarks-map { position: relative; aspect-ratio: 16 / 10; max-height: 680px; overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 20px; background: #e6ece2; }
-.satellite-tiles { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; height: 100%; filter: saturate(.9) contrast(1.04); }
-.satellite-tiles img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.satellite-tiles { width: 100%; height: 100%; background: #cad2c0 url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/export?bbox=26.18%2C47.60%2C26.34%2C47.71&bboxSR=4326&imageSR=4326&size=1600%2C1000&format=jpg&f=image') center / cover no-repeat; filter: saturate(.84) contrast(1.04); }
+.satellite-tiles img { display: none; }
 .landmarks-map-canvas { position: absolute; inset: 0; pointer-events: none; }
 .landmark-marker { position: absolute; left: var(--map-x); top: var(--map-y); display: grid; place-items: center; width: 38px; aspect-ratio: 1; color: #fff; background: var(--dossier-ink); border: 3px solid var(--dossier-paper); border-radius: 50%; box-shadow: 0 5px 12px rgb(16 39 64 / .25); font-size: .68rem; font-weight: 850; letter-spacing: .04em; text-decoration: none; pointer-events: auto; transform: translate(-50%, -50%); transition: background .16s ease, transform .16s ease; }
+.landmark-marker:nth-child(2) { margin: 20px 0 0 -14px; }
+.landmark-marker:nth-child(3) { margin: -18px 0 0 20px; }
 .landmark-marker:hover, .landmark-marker:focus-visible { background: var(--dossier-blue); transform: translate(-50%, -50%) scale(1.12); }
 .landmarks-map-key { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .35rem 1.25rem; margin-top: 1.1rem; padding: 1rem 0 0; border-top: 1px solid var(--dossier-rule); }
 .landmarks-map-key a { display: flex; align-items: center; gap: .45rem; min-width: 0; overflow-wrap: anywhere; color: var(--dossier-ink); font-size: .76rem; font-weight: 800; line-height: 1.3; text-decoration: none; }
