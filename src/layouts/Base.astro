@@ -3,9 +3,9 @@ import '../styles/site.css';
 import '../styles/refresh.css';
 import { eventConfig } from '../event.config';
 import { copy } from '../content/site';
-const { title = 'ONTI 2027', description = 'Olimpiada Națională de Tehnologia Informației · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang: 'ro' | 'en' };
+const { title = 'ONTI 2027', description = 'Olimpiada Națională de Tehnologia Informației · Suceava, România', lang = 'ro' } = Astro.props as { title?: string; description?: string; lang?: 'ro' };
 const t = copy[lang];
-const path = Astro.url.pathname.replace(/^\/(ro|en)/, '') || '/';
+const path = Astro.url.pathname.replace(/^\/ro/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
 const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toString();
 ---
@@ -19,11 +19,10 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="alternate" hreflang="ro" href={new URL(`/ro${path === '/' ? '' : path}`, Astro.site)} />
-    <link rel="alternate" hreflang="en" href={new URL(`/en${path === '/' ? '' : path}`, Astro.site)} />
     <link rel="alternate" hreflang="x-default" href={new URL(`/ro${path === '/' ? '' : path}`, Astro.site)} />
     <link rel="icon" type="image/png" href="/cnscm-logo.png" />
     <link rel="preload" href="/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin />
-    <meta property="og:type" content="website" /><meta property="og:title" content={`${title} · ONTI 2027`} /><meta property="og:description" content={description} /><meta property="og:locale" content={lang === 'ro' ? 'ro_RO' : 'en_GB'} /><meta property="og:image" content={new URL('/images/ontic-social.svg', Astro.site)} />
+    <meta property="og:type" content="website" /><meta property="og:title" content={`${title} · ONTI 2027`} /><meta property="og:description" content={description} /><meta property="og:locale" content="ro_RO" /><meta property="og:image" content={new URL('/images/ontic-social.svg', Astro.site)} />
     <script type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', '@type': 'WebSite', name: 'ONTI 2027', url: new URL(`/${lang}`, Astro.site).toString(), inLanguage: lang })} />
     {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <script async src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
   </head>

@@ -4,8 +4,10 @@ import { eventConfig } from '../../event.config';
 import { faq } from '../../content/site';
 import { getEditorial } from '../../lib/editorial';
 
-const lang = Astro.params.lang as 'ro' | 'en';
-const isEn = lang === 'en';
+const requestedLang = Astro.params.lang;
+if (requestedLang !== 'ro') return Astro.redirect(`/ro/${Astro.params.slug || ''}`.replace(/\/$/, ''), 301);
+const lang = 'ro' as const;
+const isEn = false;
 const say = (ro: string, en: string) => isEn ? en : ro;
 const slug = Astro.params.slug || '';
 const parts = slug.split('/');
