@@ -38,19 +38,8 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
           <a href={`/${lang}/program`} class:list={{ active: isActive('/program') }}>{lang === 'ro' ? 'Program' : 'Schedule'}</a>
           <a href={`/${lang}/participare`} class:list={{ active: isActive('/participare') }}>{lang === 'ro' ? 'Participare' : 'Participation'}</a>
         </div>
-        <details class="more-nav" class:list={{ 'has-active': ['/locatii','/bucovina','/calatorie'].some(isActive) }}>
-          <summary>{lang === 'ro' ? 'Suceava' : 'Suceava'}</summary>
-          <div class="more-links">
-            <a href={`/${lang}/locatii`}>{lang === 'ro' ? 'Hartă și locații' : 'Map and venues'}</a>
-            <a href={`/${lang}/calatorie`}>{lang === 'ro' ? 'Călătorie' : 'Travel'}</a>
-            <a href={`/${lang}/bucovina`}>{lang === 'ro' ? 'Bucovina' : 'Bucovina'}</a>
-            <a href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">Colegiul Național „Ștefan cel Mare” ↗</a>
-          </div>
-        </details>
-        <details class="more-nav info-nav" class:list={{ 'has-active': ['/stiri','/faq','/contact'].some(isActive) }}>
-          <summary>{lang === 'ro' ? 'Informații' : 'Information'}</summary>
-          <div class="more-links"><a href={`/${lang}/stiri`}>{lang === 'ro' ? 'Noutăți' : 'News'}</a><a href={`/${lang}/faq`}>FAQ</a><a href={`/${lang}/contact`}>{lang === 'ro' ? 'Contact' : 'Contact'}</a></div>
-        </details>
+        <a href={`/${lang}/locatii`} class:list={{ active: ['/locatii','/bucovina','/calatorie'].some(isActive) }}>{lang === 'ro' ? 'Suceava' : 'Suceava'}</a>
+        <a href={`/${lang}/stiri`} class:list={{ active: ['/stiri','/faq','/contact'].some(isActive) }}>{lang === 'ro' ? 'Informații' : 'Information'}</a>
       </nav>
     </div><div class="scroll-progress" aria-hidden="true"></div></header>
     <main id="main"><slot /></main>
