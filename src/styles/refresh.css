@@ -1,24 +1,25 @@
 :root { --dossier-ink: #102740; --dossier-blue: #1f4f8b; --dossier-gold: #a77817; --dossier-paper: #fcfcfa; --dossier-rule: #cbd3d8; --dossier-muted: #566571; }
 
-html { background: var(--dossier-paper); }
-body { background: var(--dossier-paper); }
-.site-header { position: sticky; top: 0; z-index: 100; isolation: isolate; background: color-mix(in srgb, var(--dossier-paper) 96%, transparent); border-bottom: 1px solid var(--dossier-rule); backdrop-filter: blur(12px); }
+html { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; }
+body { min-height: 100%; background: var(--dossier-paper); overflow-x: clip; overflow-y: auto; }
+.site-header { position: sticky; top: 0; z-index: 100; isolation: isolate; background: color-mix(in srgb, var(--dossier-paper) 68%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--dossier-ink) 14%, transparent); backdrop-filter: blur(22px) saturate(1.45); -webkit-backdrop-filter: blur(22px) saturate(1.45); }
 .header-inner { min-height: 76px; gap: 1.5rem; }
 .brand-word strong { color: var(--dossier-ink); letter-spacing: -.05em; }
 .brand-word small { color: var(--dossier-muted); letter-spacing: .08em; text-transform: uppercase; }
 #main-nav { gap: .2rem; }
 .nav-links { gap: 0; }
-.nav-links > a, .more-nav summary { padding: .7rem .7rem; color: var(--dossier-ink); font-size: .79rem; font-weight: 750; letter-spacing: .01em; border-radius: 10px; }
-.nav-links > a:hover, .nav-links > a.active, .more-nav summary:hover, .more-nav.has-active summary { color: var(--dossier-blue); background: transparent; box-shadow: inset 0 -2px 0 var(--dossier-gold); }
+.nav-links > a, .more-nav summary { padding: .7rem .7rem; color: var(--dossier-ink); font-size: .79rem; font-weight: 750; letter-spacing: .01em; border-radius: 12px; transition: color .16s ease, background .16s ease; }
+.nav-links > a:hover, .more-nav summary:hover { color: var(--dossier-blue); background: color-mix(in srgb, #fff 54%, transparent); }
+.nav-links > a.active, .more-nav.has-active summary { color: var(--dossier-blue); background: color-mix(in srgb, #fff 72%, transparent); }
 .more-nav { position: relative; }
 .more-nav summary { list-style: none; cursor: pointer; }
 .more-nav summary::-webkit-details-marker { display: none; }
 .more-nav summary::after { content: none; display: none; }
-.more-links { min-width: 224px; padding: .4rem; border: 1px solid var(--dossier-rule); border-radius: 16px; background: var(--dossier-paper); box-shadow: 0 12px 28px rgb(16 39 64 / .12); }
+.more-links { min-width: 224px; padding: .4rem; border: 1px solid color-mix(in srgb, var(--dossier-ink) 12%, transparent); border-radius: 16px; background: color-mix(in srgb, var(--dossier-paper) 80%, transparent); box-shadow: 0 12px 28px rgb(16 39 64 / .12); backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35); }
 .more-links a { padding: .68rem .72rem; border-radius: 10px; }
 .more-links a:hover { color: var(--dossier-blue); background: #eef2f4; }
 .nav-tools { gap: .45rem; }
-.cnscm-link { padding: .5rem .68rem; color: var(--dossier-ink); border: 1px solid var(--dossier-ink); border-radius: 10px; font-size: .75rem; font-weight: 800; text-decoration: none; }
+.cnscm-link { padding: .5rem .68rem; color: var(--dossier-ink); border: 1px solid color-mix(in srgb, var(--dossier-ink) 70%, transparent); border-radius: 12px; font-size: .75rem; font-weight: 800; text-decoration: none; }
 .cnscm-link:hover { color: #fff; background: var(--dossier-ink); }
 main { position: relative; z-index: 0; overflow: clip; }
 
@@ -89,7 +90,17 @@ main { position: relative; z-index: 0; overflow: clip; }
 .locations-heading { display: grid; grid-template-columns: .85fr 1.15fr; gap: clamp(2rem, 8vw, 8rem); align-items: end; margin-bottom: 2.4rem; }
 .locations-heading h2 { max-width: 590px; margin: .7rem 0 0; color: var(--dossier-ink); font-size: clamp(2.2rem, 4.2vw, 4.2rem); line-height: .98; letter-spacing: -.055em; }
 .locations-heading p { max-width: 540px; margin: 0; color: var(--dossier-muted); line-height: 1.7; }
-.tpl-map-wrap { position: relative; overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 24px; background: #eef1ef; }
+.landmarks-map { position: relative; aspect-ratio: 4 / 3; max-height: 680px; overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 16px; background: #e6ece2; }
+.landmarks-map-canvas { position: absolute; inset-inline: 0; top: 50%; width: 100%; aspect-ratio: 1; transform: translateY(-50%); }
+.landmarks-map-tiles { display: grid; grid-template-columns: repeat(3, 1fr); width: 100%; height: 100%; }
+.landmarks-map-tiles img { display: block; width: 100%; height: 100%; }
+.landmark-marker { position: absolute; left: var(--map-x); top: var(--map-y); display: grid; place-items: center; width: 38px; aspect-ratio: 1; color: #fff; background: var(--dossier-ink); border: 3px solid var(--dossier-paper); border-radius: 50%; box-shadow: 0 5px 12px rgb(16 39 64 / .25); font-size: .68rem; font-weight: 850; letter-spacing: .04em; text-decoration: none; transform: translate(-50%, -50%); transition: background .16s ease, transform .16s ease; }
+.landmark-marker:hover, .landmark-marker:focus-visible { background: var(--dossier-blue); transform: translate(-50%, -50%) scale(1.12); }
+.map-attribution { position: absolute; right: .65rem; bottom: .4rem; margin: 0; padding: .1rem .35rem; color: var(--dossier-ink); background: color-mix(in srgb, var(--dossier-paper) 90%, transparent); font-size: .68rem; }
+.transport-map { display: grid; grid-template-columns: .6fr 1.4fr; gap: clamp(2rem, 6vw, 6rem); align-items: center; margin-top: clamp(4.5rem, 8vw, 7rem); }
+.transport-map h2 { margin: 0; color: var(--dossier-ink); font-size: clamp(2rem, 3.5vw, 3.45rem); line-height: 1; letter-spacing: -.04em; }
+.transport-map p { max-width: 410px; margin: 1.1rem 0 0; color: var(--dossier-muted); line-height: 1.65; }
+.tpl-map-wrap { position: relative; overflow: hidden; border: 1px solid var(--dossier-rule); border-radius: 16px; background: #eef1ef; }
 .tpl-map-frame { display: block; width: 100%; height: min(66vw, 650px); min-height: 470px; border: 0; }
 .tpl-map-open { position: absolute; right: 1rem; bottom: 1rem; padding: .72rem .9rem; color: #fff; background: var(--dossier-ink); border-radius: 12px; font-size: .79rem; font-weight: 800; text-decoration: none; box-shadow: 0 8px 18px rgb(16 39 64 / .18); }
 .tpl-map-open:hover { background: var(--dossier-blue); }
@@ -98,7 +109,9 @@ main { position: relative; z-index: 0; overflow: clip; }
 .city-stops li > span { color: var(--dossier-gold); font-size: .72rem; font-weight: 850; letter-spacing: .08em; }
 .city-stops h3 { margin: 0; color: var(--dossier-ink); font-size: 1.05rem; line-height: 1.3; }
 .city-stops p { margin: .42rem 0 0; color: var(--dossier-muted); font-size: .9rem; line-height: 1.55; }
+.stop-directions { display: inline-block; margin-top: .7rem; color: var(--dossier-blue); font-size: .8rem; font-weight: 800; text-decoration: none; }
+.stop-directions:hover { text-decoration: underline; text-underline-offset: .22em; }
 
 @media (max-width: 1050px) { .cnscm-link { display: none; } .dossier-hero-grid { grid-template-columns: 1fr 1fr; gap: 2.8rem; } .dossier-photo, .dossier-photo img { min-height: 490px; } .essentials-grid, .routes-grid, .updates-grid { gap: 3rem; } .route-list a { grid-template-columns: minmax(130px, .65fr) 1.35fr auto; } }
-@media (max-width: 720px) { .site-header { backdrop-filter: none; } .header-inner { min-height: 68px; } .brand-word small { font-size: .55rem; } #main-nav { background: var(--dossier-paper); } .more-nav { width: 100%; } .more-nav summary { display: block; } .more-links { position: static; width: 100%; box-shadow: none; border-width: 1px 0; border-radius: 0; } .info-nav { border-bottom: 1px solid var(--dossier-rule); } .dossier-hero { min-height: auto; padding: 0 0 3rem; } .dossier-hero-grid { display: flex; flex-direction: column; gap: 0; } .dossier-copy { width: 100%; padding: 3.3rem 0 2.2rem; } .dossier-running { margin-bottom: 1rem; font-size: .68rem; } .dossier-copy h1 { font-size: clamp(4.1rem, 22vw, 6.3rem); } .dossier-title { margin-top: 1.4rem; font-size: 1.34rem; } .dossier-intro { font-size: 1rem; } .dossier-actions { display: grid; grid-template-columns: 1fr; gap: .8rem; align-items: start; } .dossier-actions .button { width: 100%; justify-content: center; } .dossier-photo, .dossier-photo img { width: 100%; min-height: 355px; border-radius: 18px; } .dossier-host { align-self: flex-start; margin-top: .9rem; } .section { padding: 4.2rem 0; } .essentials-grid, .routes-grid, .suceava-file-grid, .updates-grid { grid-template-columns: 1fr; gap: 2.3rem; } .fact-sheet div { grid-template-columns: 1fr; gap: .45rem; } .routes { padding-top: 4.2rem; } .route-list a { grid-template-columns: 1fr auto; gap: .45rem 1rem; } .route-list a span { grid-column: 1; } .route-list a b { grid-column: 2; grid-row: 1 / span 2; align-self: center; } .suceava-photo-stack { min-height: 390px; } .suceava-photo-stack img:first-child { width: 86%; height: 350px; } .suceava-photo-stack img:last-child { width: 45%; height: 150px; border-width: 5px; border-radius: 16px; } .dossier-news li a { grid-template-columns: 1fr auto; gap: .45rem .9rem; } .locations-heading { grid-template-columns: 1fr; gap: 1.1rem; margin-bottom: 1.8rem; } .tpl-map-wrap { border-radius: 18px; } .tpl-map-frame { height: 560px; min-height: 560px; } .tpl-map-open { right: .75rem; bottom: .75rem; max-width: calc(100% - 1.5rem); } .city-stops { grid-template-columns: 1fr; margin-top: 2.4rem; } .city-stops li { min-height: 0; padding: 1.15rem 0; } }
+@media (max-width: 720px) { .site-header { background: color-mix(in srgb, var(--dossier-paper) 79%, transparent); backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35); } .header-inner { min-height: 68px; } .brand-word small { font-size: .55rem; } #main-nav { background: color-mix(in srgb, var(--dossier-paper) 88%, transparent); backdrop-filter: blur(20px) saturate(1.3); -webkit-backdrop-filter: blur(20px) saturate(1.3); } .more-nav { width: 100%; } .more-nav summary { display: block; } .more-links { position: static; width: 100%; box-shadow: none; border-width: 1px 0; border-radius: 0; } .info-nav { border-bottom: 1px solid var(--dossier-rule); } .dossier-hero { min-height: auto; padding: 0 0 3rem; } .dossier-hero-grid { display: flex; flex-direction: column; gap: 0; } .dossier-copy { width: 100%; padding: 3.3rem 0 2.2rem; } .dossier-running { margin-bottom: 1rem; font-size: .68rem; } .dossier-copy h1 { font-size: clamp(4.1rem, 22vw, 6.3rem); } .dossier-title { margin-top: 1.4rem; font-size: 1.34rem; } .dossier-intro { font-size: 1rem; } .dossier-actions { display: grid; grid-template-columns: 1fr; gap: .8rem; align-items: start; } .dossier-actions .button { width: 100%; justify-content: center; } .dossier-photo, .dossier-photo img { width: 100%; min-height: 355px; border-radius: 18px; } .dossier-host { align-self: flex-start; margin-top: .9rem; } .section { padding: 4.2rem 0; } .essentials-grid, .routes-grid, .suceava-file-grid, .updates-grid { grid-template-columns: 1fr; gap: 2.3rem; } .fact-sheet div { grid-template-columns: 1fr; gap: .45rem; } .routes { padding-top: 4.2rem; } .route-list a { grid-template-columns: 1fr auto; gap: .45rem 1rem; } .route-list a span { grid-column: 1; } .route-list a b { grid-column: 2; grid-row: 1 / span 2; align-self: center; } .suceava-photo-stack { min-height: 390px; } .suceava-photo-stack img:first-child { width: 86%; height: 350px; } .suceava-photo-stack img:last-child { width: 45%; height: 150px; border-width: 5px; border-radius: 16px; } .dossier-news li a { grid-template-columns: 1fr auto; gap: .45rem .9rem; } .locations-heading { grid-template-columns: 1fr; gap: 1.1rem; margin-bottom: 1.8rem; } .landmarks-map { aspect-ratio: 1; border-radius: 14px; } .tpl-map-wrap { border-radius: 14px; } .tpl-map-frame { height: 560px; min-height: 560px; } .tpl-map-open { right: .75rem; bottom: .75rem; max-width: calc(100% - 1.5rem); } .city-stops { grid-template-columns: 1fr; margin-top: 2.4rem; } .city-stops li { min-height: 0; padding: 1.15rem 0; } .transport-map { grid-template-columns: 1fr; gap: 1.8rem; margin-top: 4.5rem; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: 0.01ms !important; } }
