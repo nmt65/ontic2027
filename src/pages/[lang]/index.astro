@@ -11,23 +11,25 @@ const { news } = await getEditorial();
 <Base lang={lang} title={say('Acasă', 'Home')}>
   <HomeHero lang={lang} />
 
-  <section class="section quick-section" aria-labelledby="quick-title"><div class="wrap">
-    <div class="section-head compact-head"><div><span class="kicker">ONTI 2027</span><h2 id="quick-title">{say('Tot ce ai nevoie, fără ocol.', 'Everything you need, without the detours.')}</h2></div></div>
-    <nav class="quick-links" aria-label={say('Acces rapid', 'Quick links')}>
-      <a href={`/${lang}/concurs`}><span>01</span><strong>{say('Concurs', 'Contest')}</strong><small>{say('Secțiuni și documente oficiale', 'Sections and official documents')}</small><b aria-hidden="true">→</b></a>
-      <a href={`/${lang}/program`}><span>02</span><strong>{say('Program', 'Schedule')}</strong><small>{say('Structura ediției', 'Edition structure')}</small><b aria-hidden="true">→</b></a>
-      <a href={`/${lang}/participare`}><span>03</span><strong>{say('Participare', 'Participation')}</strong><small>{say('Pentru elevi și profesori', 'For students and teachers')}</small><b aria-hidden="true">→</b></a>
-      <a href={`/${lang}/locatii`}><span>04</span><strong>{say('Suceava', 'Suceava')}</strong><small>{say('Hartă, locații și deplasare', 'Map, venues and travel')}</small><b aria-hidden="true">→</b></a>
+  <section class="section essentials" aria-labelledby="essentials-title"><div class="wrap essentials-grid">
+    <div class="essentials-intro"><h2 id="essentials-title">{say('Ce știm până acum.', 'What we know so far.')}</h2><p>{say('Aici găsești informațiile anunțate oficial despre concurs și despre organizarea ediției.', 'Here you can find the official information announced so far about the contest and its organisation.')}</p></div>
+    <dl class="fact-sheet"><div><dt>{say('Locul principal', 'Main venue')}</dt><dd>{say('Colegiul Național „Ștefan cel Mare” Suceava', 'Colegiul Național „Ștefan cel Mare” Suceava')}</dd></div><div><dt>{say('Secțiuni', 'Sections')}</dt><dd>{say('TIC IX–XII și C# IX–XII', 'TIC IX–XII and C# IX–XII')}</dd></div><div><dt>{say('Calendar', 'Schedule')}</dt><dd>{say('Va fi publicat după confirmarea oficială', 'Published after official confirmation')}</dd></div></dl>
+  </div></section>
+
+  <section class="section routes" aria-labelledby="routes-title"><div class="wrap routes-grid">
+    <div><h2 id="routes-title">{say('Alege ce ai de rezolvat.', 'Choose what you need to do.')}</h2></div>
+    <nav class="route-list" aria-label={say('Informații principale', 'Primary information')}>
+      <a href={`/${lang}/concurs`}><strong>{say('Concurs', 'Contest')}</strong><span>{say('Secțiuni, documente și rezultate', 'Sections, official documents and results')}</span><b aria-hidden="true">→</b></a>
+      <a href={`/${lang}/program`}><strong>{say('Program', 'Schedule')}</strong><span>{say('Structura ediției și actualizări', 'Edition structure and updates')}</span><b aria-hidden="true">→</b></a>
+      <a href={`/${lang}/participare`}><strong>{say('Participare', 'Participation')}</strong><span>{say('Informații pentru elevi și profesori', 'Information for students and teachers')}</span><b aria-hidden="true">→</b></a>
+      <a href={`/${lang}/locatii`}><strong>{say('Orientare în Suceava', 'Getting around Suceava')}</strong><span>{say('Harta ONTI, locații și sosire', 'ONTI map, venues and arrival')}</span><b aria-hidden="true">→</b></a>
     </nav>
   </div></section>
 
-  <section class="section city-story" aria-labelledby="city-title"><div class="wrap city-grid">
-    <div class="city-image"><img src="/images/suceava-panorama.webp" width="1800" height="1013" loading="lazy" decoding="async" alt={say('Panoramă asupra orașului Suceava', 'Panorama of Suceava')} /></div>
-    <div class="city-copy"><span class="kicker">SUCEAVA · BUCOVINA</span><h2 id="city-title">{say('Un oraș care îți lasă spațiu să descoperi.', 'A city that leaves room to discover.')}</h2><p>{say('Între probe, orașul se citește pe jos: colegiul, Cetatea de Scaun, muzeele și ritmul calm al Bucovinei.', 'Between events, the city is best explored on foot: the school, Seat Fortress, museums and Bucovina’s calm rhythm.')}</p><div class="inline-links"><a class="button button-small" href={`/${lang}/locatii`}>{say('Vezi harta noastră', 'See our map')}</a><a class="text-link" href={`/${lang}/bucovina`}>{say('Descoperă Bucovina', 'Discover Bucovina')}</a></div></div>
+  <section class="section suceava-file" aria-labelledby="suceava-title"><div class="wrap suceava-file-grid">
+    <div class="suceava-photo-stack"><img src="/images/cetatea-aerial.webp" width="1800" height="1350" decoding="async" alt={say('Vedere aeriană a Cetății de Scaun a Sucevei', 'Aerial view of Suceava Seat Fortress')} /><img src="/images/suceava-panorama.webp" width="1800" height="1350" decoding="async" alt={say('Panoramă asupra Sucevei', 'Panorama over Suceava')} /></div>
+    <div class="suceava-file-copy"><h2 id="suceava-title">{say('Despre Suceava.', 'About Suceava.')}</h2><p>{say('Pentru deplasare și orientare, ai harta ONTI cu principalele repere din oraș. Pentru idei de vizită, găsești separat pagina despre Bucovina.', 'For travel and orientation, the ONTI map includes the main landmarks in the city. For ideas on what to visit, the Bucovina page is separate.')}</p><a class="text-link" href={`/${lang}/locatii`}>{say('Deschide harta ONTI', 'Open the ONTI map')} →</a></div>
   </div></section>
 
-  <section class="section news-section" aria-labelledby="news-title"><div class="wrap">
-    <div class="section-head compact-head"><div><span class="kicker">{say('Actualizări', 'Updates')}</span><h2 id="news-title">{say('Noutăți', 'News')}</h2></div><a class="text-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All news')} <span aria-hidden="true">→</span></a></div>
-    <ul class="news-list news-list-clean" role="list">{news.slice(0, 3).map((item) => <li><a href={`/${lang}/stiri/${item.slug}`}><span>{ro ? item.category : item.enCategory || item.category}</span><strong>{ro ? item.title : item.enTitle || item.title}</strong><b aria-hidden="true">→</b></a></li>)}</ul>
-  </div></section>
+  <section class="section updates" aria-labelledby="news-title"><div class="wrap updates-grid"><div><h2 id="news-title">{say('Actualizări.', 'Updates.')}</h2><a class="text-link" href={`/${lang}/stiri`}>{say('Toate noutățile', 'All news')} →</a></div><ul class="news-list dossier-news" role="list">{news.slice(0, 3).map((item) => <li><a href={`/${lang}/stiri/${item.slug}`}><span>{ro ? item.category : item.enCategory || item.category}</span><strong>{ro ? item.title : item.enTitle || item.title}</strong><b aria-hidden="true">→</b></a></li>)}</ul></div></section>
 </Base>

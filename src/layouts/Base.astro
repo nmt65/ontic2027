@@ -7,25 +7,14 @@ const { title = 'ONTI 2027', description = 'Olimpiada Națională de Tehnologia 
 const t = copy[lang];
 const path = Astro.url.pathname.replace(/^\/(ro|en)/, '') || '/';
 const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
-const altLang = lang === 'ro' ? 'en' : 'ro';
 const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toString();
 ---
 <!doctype html>
-<html lang={lang} data-plausible-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN || ''}>
+<html lang={lang} data-theme="light" data-plausible-domain={import.meta.env.PUBLIC_PLAUSIBLE_DOMAIN || ''}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#111827" media="(prefers-color-scheme: dark)" />
-    <script is:inline>
-      // Runs before the page is drawn, so there is no flash of the wrong theme.
-      (function chooseInitialTheme() {
-        let savedTheme = null;
-        try { savedTheme = localStorage.getItem('ontic-theme'); } catch (error) { /* storage blocked: fall back to the device setting */ }
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        document.documentElement.dataset.theme = savedTheme || (prefersDark ? 'dark' : 'light');
-      })();
-    </script>
+    <meta name="theme-color" content="#ffffff" />
     <title>{title} · ONTI 2027</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -39,10 +28,10 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
     {import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <script async src="https://challenges.cloudflare.com/turnstile/v0/api.js"></script>}
   </head>
   <body>
-    <a class="skip-link" href="#main">Sari la conținut / Skip to content</a>
+    <a class="skip-link" href="#main">Sari la conținut</a>
     <header class="site-header"><div class="header-inner wrap">
       <a class="brand" href={`/${lang}`} aria-label={`ONTI 2027 — ${eventConfig.shortHost}`}><img src="/cnscm-logo.png" width="34" height="48" alt="" /><span class="brand-word"><strong>ONTI<span>27</span></strong><small>Suceava · 2027</small></span></a>
-      <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b class="sr-only">Meniu / Menu</b></button>
+      <button class="menu-toggle" aria-expanded="false" aria-controls="main-nav"><span></span><span></span><span></span><b class="sr-only">Meniu</b></button>
       <nav id="main-nav" aria-label={lang === 'ro' ? 'Navigare principală' : 'Main navigation'}>
         <div class="nav-links">
           <a href={`/${lang}/concurs`} class:list={{ active: isActive('/concurs') }}>{lang === 'ro' ? 'Concurs' : 'Contest'}</a>
@@ -62,7 +51,7 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
           <summary>{lang === 'ro' ? 'Informații' : 'Information'}</summary>
           <div class="more-links"><a href={`/${lang}/stiri`}>{lang === 'ro' ? 'Noutăți' : 'News'}</a><a href={`/${lang}/faq`}>FAQ</a><a href={`/${lang}/contact`}>{lang === 'ro' ? 'Contact' : 'Contact'}</a></div>
         </details>
-        <div class="nav-tools"><a class="cnscm-link" href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">CNSCM <span aria-hidden="true">↗</span></a><a class="language" href={`/${altLang}${path === '/' ? '' : path}`} lang={altLang} aria-label={lang === 'ro' ? 'Switch to English' : 'Schimbă în română'}>{lang === 'ro' ? 'EN' : 'RO'}</a><button class="theme-toggle" aria-label={lang === 'ro' ? 'Schimbă tema luminoasă/întunecată' : 'Switch light/dark theme'} title={lang === 'ro' ? 'Schimbă tema' : 'Switch theme'}><span aria-hidden="true">◐</span></button></div>
+        <div class="nav-tools"><a class="cnscm-link" href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer">CNSCM <span aria-hidden="true">↗</span></a></div>
       </nav>
     </div><div class="scroll-progress" aria-hidden="true"></div></header>
     <main id="main"><slot /></main>
@@ -94,22 +83,10 @@ const canonical = new URL(`/${lang}${path === '/' ? '' : path}`, Astro.site).toS
         menu.focus();
       });
 
-      // The theme toggle saves an explicit choice; until then the device setting is followed.
-      document.querySelector('.theme-toggle')?.addEventListener('click', () => {
-        const nextTheme = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-        document.documentElement.dataset.theme = nextTheme;
-        try { localStorage.setItem('ontic-theme', nextTheme); } catch (error) { console.warn('Theme choice not saved', error); }
-      });
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
-        let hasSavedTheme = false;
-        try { hasSavedTheme = Boolean(localStorage.getItem('ontic-theme')); } catch (error) { /* storage blocked */ }
-        if (!hasSavedTheme) document.documentElement.dataset.theme = event.matches ? 'dark' : 'light';
-      });
       const loadAnalytics = () => { const domain = document.documentElement.dataset.plausibleDomain; if (!domain || document.querySelector('[data-ontic-analytics]')) return; const s = document.createElement('script'); s.defer = true; s.src = 'https://plausible.io/js/script.js'; s.dataset.domain = domain; s.dataset.onticAnalytics = 'true'; document.head.append(s); };
       const banner = document.querySelector('.cookie-banner'); const choice = localStorage.getItem('ontic-cookie-choice'); if (choice === 'all') loadAnalytics(); if (!choice && document.documentElement.dataset.plausibleDomain && !location.pathname.includes('/confidentialitate')) banner.hidden = false;
       document.querySelectorAll('[data-cookie]').forEach(b => b.addEventListener('click', () => { localStorage.setItem('ontic-cookie-choice', b.dataset.cookie); banner.hidden = true; if (b.dataset.cookie === 'all') loadAnalytics(); }));
     </script>
-    <script>import '../scripts/maps';</script>
     <button class="back-top" type="button" hidden aria-label={lang === 'ro' ? 'Înapoi sus' : 'Back to top'}>⌃</button>
     <script>import '../scripts/experience';</script>
   </body>

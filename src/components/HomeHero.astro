@@ -1,26 +1,19 @@
 ---
-import { dateIsKnown, eventConfig } from '../event.config';
 const { lang } = Astro.props as { lang: 'ro' | 'en' };
 const say = (ro: string, en: string) => lang === 'ro' ? ro : en;
-const date = dateIsKnown
-  ? new Date(eventConfig.startDate!).toLocaleDateString(lang === 'ro' ? 'ro-RO' : 'en-GB', { dateStyle: 'long', timeZone: 'Europe/Bucharest' })
-  : say('Calendarul va fi publicat de organizatori.', 'The schedule will be published by the organizers.');
 ---
-<section class="home-hero" aria-labelledby="launch-title">
-  <div class="wrap hero-layout">
-    <div class="hero-copy">
-      <p class="eyebrow">Suceava · România · 2027</p>
-      <h1 id="launch-title">{say('Olimpiada Națională de', 'National Olympiad in')} <span>{say('Tehnologia Informației.', 'Information Technology.')}</span></h1>
-      <p class="hero-description">{say('Un loc limpede pentru tot ce contează la ONTI: concursul, programul, participarea și orientarea în Suceava.', 'One clear place for what matters at ONTI: the contest, schedule, participation and getting around Suceava.')}</p>
-      <div class="hero-actions">
-        <a class="button" href={`/${lang}/concurs`}>{say('Explorează concursul', 'Explore the contest')} <span aria-hidden="true">→</span></a>
-        <a class="text-link" href={`/${lang}/program`}>{say('Program orientativ', 'Provisional schedule')}</a>
-      </div>
-      <p class="hero-date">{date}</p>
+<section class="dossier-hero" aria-labelledby="launch-title">
+  <div class="wrap dossier-hero-grid">
+    <div class="dossier-copy">
+      <p class="dossier-running">{say('Ediția națională · Suceava · 2027', 'National stage · Suceava · 2027')}</p>
+      <h1 id="launch-title">ONTI <span>2027</span></h1>
+      <p class="dossier-title">{say('Olimpiada Națională de Tehnologia Informației', 'National Olympiad in Information Technology')}</p>
+      <p class="dossier-intro">{say('Detalii despre concurs, program și sosirea la Suceava.', 'Details about the contest, its schedule and arriving in Suceava.')}</p>
+      <div class="dossier-actions"><a class="button" href={`/${lang}/concurs`}>{say('Vezi concursul', 'View the contest')} <span aria-hidden="true">→</span></a><a class="text-link" href={`/${lang}/program`}>{say('Program orientativ', 'Provisional schedule')}</a></div>
     </div>
-    <div class="hero-image-wrap">
-      <img class="hero-image" src="/images/cnscm-exterior.webp" width="1600" height="1200" fetchpriority="high" alt={say('Fațada Colegiului Național „Ștefan cel Mare” din Suceava', 'The façade of Colegiul Național „Ștefan cel Mare” in Suceava')} />
-      <a class="host-link" href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer"><img src="/cnscm-logo.png" width="38" height="52" alt="" /> <span>{say('Gazdă: CNSCM Suceava', 'Host: CNSCM Suceava')}</span> <b aria-hidden="true">↗</b></a>
-    </div>
+    <figure class="dossier-photo">
+      <img src="/images/cnscm-cover.webp" width="1800" height="1350" fetchpriority="high" alt={say('Colegiul Național Ștefan cel Mare din Suceava', 'Colegiul Național Ștefan cel Mare in Suceava')} />
+    </figure>
+    <a class="dossier-host" href="https://cnstefancelmare.ro/" target="_blank" rel="noreferrer"><img src="/cnscm-logo.png" width="30" height="42" alt="" /><span>{say('Gazda ediției: CNSCM Suceava', 'Edition host: CNSCM Suceava')}</span><b aria-hidden="true">↗</b></a>
   </div>
 </section>
